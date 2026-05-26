@@ -16,6 +16,9 @@ const categorySelect =
 const characterSelect =
   document.getElementById("characterSelect");
 
+const vsScreen =
+  document.getElementById("vsScreen");
+
 const resultScreen =
   document.getElementById("resultScreen");
 
@@ -34,19 +37,32 @@ const fighterGrid =
 const characterTitle =
   document.getElementById("characterTitle");
 
+const categoryTitle =
+  document.getElementById("categoryTitle");
+
 const backToMenuBtn =
   document.getElementById("backToMenuBtn");
 
 const backToCategoryBtn =
   document.getElementById("backToCategoryBtn");
 
+const p1Name =
+  document.getElementById("p1Name");
+
+const p2Name =
+  document.getElementById("p2Name");
+
 
 // ==========================
-// CATEGORY
+// PLAYER SELECT
 // ==========================
-let selectedCategory = null;
+let selectingPlayer = 1;
 
-let selectedFighter = null;
+let selectedCategoryP1 = null;
+let selectedCategoryP2 = null;
+
+let selectedFighterP1 = null;
+let selectedFighterP2 = null;
 
 
 // ==========================
@@ -88,13 +104,26 @@ playBtn.addEventListener("click",()=>{
     "activeScreen"
   );
 
+  openCategorySelect();
+
+});
+
+
+// ==========================
+// OPEN CATEGORY SELECT
+// ==========================
+function openCategorySelect(){
+
   categorySelect.classList.add(
     "activeScreen"
   );
 
+  categoryTitle.innerHTML =
+    `PLAYER ${selectingPlayer} CATEGORY`;
+
   gameState = "CATEGORY_SELECT";
 
-});
+}
 
 
 // ==========================
@@ -109,6 +138,8 @@ backToMenuBtn.addEventListener("click",()=>{
   mainMenu.classList.add(
     "activeScreen"
   );
+
+  resetSelections();
 
   gameState = "MENU";
 
@@ -134,25 +165,39 @@ backToCategoryBtn.addEventListener("click",()=>{
 
 
 // ==========================
-// ELEMENTAL CATEGORY
+// CATEGORY BUTTONS
 // ==========================
 elementalBtn.addEventListener("click",()=>{
 
-  selectedCategory =
-    "elemental";
+  if(selectingPlayer === 1){
+
+    selectedCategoryP1 =
+      "elemental";
+
+  }else{
+
+    selectedCategoryP2 =
+      "elemental";
+
+  }
 
   openCharacterSelect();
 
 });
 
-
-// ==========================
-// MEME CATEGORY
-// ==========================
 memeBtn.addEventListener("click",()=>{
 
-  selectedCategory =
-    "meme";
+  if(selectingPlayer === 1){
+
+    selectedCategoryP1 =
+      "meme";
+
+  }else{
+
+    selectedCategoryP2 =
+      "meme";
+
+  }
 
   openCharacterSelect();
 
@@ -160,7 +205,7 @@ memeBtn.addEventListener("click",()=>{
 
 
 // ==========================
-// CHARACTER SELECT
+// OPEN CHARACTER SELECT
 // ==========================
 function openCharacterSelect(){
 
@@ -172,17 +217,32 @@ function openCharacterSelect(){
     "activeScreen"
   );
 
+  renderCharacterCards();
+
+}
+
+
+// ==========================
+// RENDER CARDS
+// ==========================
+function renderCharacterCards(){
+
   fighterGrid.innerHTML = "";
 
   characterTitle.innerHTML =
-    selectedCategory.toUpperCase();
+    `PLAYER ${selectingPlayer} SELECT`;
+
+  let currentCategory =
+    selectingPlayer === 1
+    ? selectedCategoryP1
+    : selectedCategoryP2;
 
   for(let key in fighters){
 
     let fighter = fighters[key];
 
     if(fighter.category !==
-       selectedCategory) continue;
+       currentCategory) continue;
 
     const card =
       document.createElement("div");
@@ -195,10 +255,15 @@ function openCharacterSelect(){
 
     card.innerHTML = `
 
-      <img
-        src="${fighter.image}"
-        class="fighterImage"
+      <div
+        class="fighterPlaceholder"
+        style="
+          color:${fighter.color};
+          text-shadow:0 0 15px ${fighter.color};
+        "
       >
+        ${fighter.name.split(" ")[0]}
+      </div>
 
       <h2 style="color:${fighter.color}">
         ${fighter.name}
@@ -211,26 +276,46 @@ function openCharacterSelect(){
 
     card.addEventListener("mouseenter",()=>{
 
-      card.style.boxShadow =
-        `0 0 35px ${fighter.color}`;
+      if(
+        !card.classList.contains(
+          "selectedP1"
+        ) &&
+        !card.classList.contains(
+          "selectedP2"
+        )
+      ){
+
+        card.style.boxShadow =
+          `0 0 35px ${fighter.color}`;
+
+      }
 
     });
 
     card.addEventListener("mouseleave",()=>{
 
-      card.style.boxShadow =
-        "";
+      if(
+        !card.classList.contains(
+          "selectedP1"
+        ) &&
+        !card.classList.contains(
+          "selectedP2"
+        )
+      ){
+
+        card.style.boxShadow =
+          "";
+
+      }
 
     });
 
     card.addEventListener("click",()=>{
 
-      selectedFighter =
-        fighter;
-
-      applySelectedFighter();
-
-      startGame();
+      selectFighter(
+        fighter,
+        card
+      );
 
     });
 
@@ -242,41 +327,158 @@ function openCharacterSelect(){
 
 
 // ==========================
-// APPLY FIGHTER
+// SELECT FIGHTER
 // ==========================
-function applySelectedFighter(){
+function selectFighter(
+  fighter,
+  card
+){
+
+  // ==========================
+  // PLAYER 1
+  // ==========================
+  if(selectingPlayer === 1){
+
+    selectedFighterP1 =
+      fighter;
+
+    card.classList.add(
+      "selectedP1"
+    );
+
+    card.style.boxShadow =
+      "0 0 40px #3b82f6";
+
+    setTimeout(()=>{
+
+      selectingPlayer = 2;
+
+      characterSelect.classList.remove(
+        "activeScreen"
+      );
+
+      openCategorySelect();
+
+    },700);
+
+    return;
+
+  }
+
+  // ==========================
+  // PLAYER 2
+  // ==========================
+  selectedFighterP2 =
+    fighter;
+
+  card.classList.add(
+    "selectedP2"
+  );
+
+  card.style.boxShadow =
+    "0 0 40px #ef4444";
+
+  setTimeout(()=>{
+
+    openVSscreen();
+
+  },700);
+
+}
+
+
+// ==========================
+// VS SCREEN
+// ==========================
+function openVSscreen(){
+
+  characterSelect.classList.remove(
+    "activeScreen"
+  );
+
+  vsScreen.classList.add(
+    "activeScreen"
+  );
+
+  p1Name.innerHTML =
+    selectedFighterP1.name;
+
+  p2Name.innerHTML =
+    selectedFighterP2.name;
+
+  p1Name.style.color =
+    selectedFighterP1.color;
+
+  p2Name.style.color =
+    selectedFighterP2.color;
+
+  setTimeout(()=>{
+
+    vsScreen.classList.remove(
+      "activeScreen"
+    );
+
+    applySelectedFighters();
+
+    startGame();
+
+  },2500);
+
+}
+
+
+// ==========================
+// APPLY FIGHTERS
+// ==========================
+function applySelectedFighters(){
 
   // PLAYER 1
   player1.fighter =
-    selectedFighter;
+    selectedFighterP1;
 
   player1.hp =
-    selectedFighter.hp;
+    selectedFighterP1.hp;
 
   player1.maxHP =
-    selectedFighter.hp;
+    selectedFighterP1.hp;
 
   player1.speed =
-    selectedFighter.speed;
+    selectedFighterP1.speed;
 
   p1.style.filter =
-    selectedFighter.aura;
+    selectedFighterP1.aura;
 
-  // PLAYER 2 DEFAULT
+  // PLAYER 2
   player2.fighter =
-    fighters.defaultStickman;
+    selectedFighterP2;
 
   player2.hp =
-    player2.fighter.hp;
+    selectedFighterP2.hp;
 
   player2.maxHP =
-    player2.fighter.hp;
+    selectedFighterP2.hp;
 
   player2.speed =
-    player2.fighter.speed;
+    selectedFighterP2.speed;
 
   p2.style.filter =
-    player2.fighter.aura;
+    selectedFighterP2.aura;
+
+}
+
+
+// ==========================
+// RESET
+// ==========================
+function resetSelections(){
+
+  selectingPlayer = 1;
+
+  selectedCategoryP1 = null;
+  selectedCategoryP2 = null;
+
+  selectedFighterP1 = null;
+  selectedFighterP2 = null;
 
 }
 
@@ -285,10 +487,6 @@ function applySelectedFighter(){
 // START GAME
 // ==========================
 function startGame(){
-
-  characterSelect.classList.remove(
-    "activeScreen"
-  );
 
   gameStarted = true;
 

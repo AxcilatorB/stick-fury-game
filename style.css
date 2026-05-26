@@ -773,3 +773,141 @@ body{
 
   margin-top:10px;
 }
+
+/* ==========================
+   PLACEHOLDER FIGHTER
+========================== */
+.fighterPlaceholder{
+
+  width:140px;
+  height:140px;
+
+  border-radius:50%;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  margin-bottom:20px;
+
+  font-size:18px;
+
+  font-family:
+    'Press Start 2P',
+    cursive;
+
+  border:
+    2px solid rgba(255,255,255,0.2);
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,255,255,0.12),
+      transparent
+    );
+}
+
+
+/* ==========================
+   VS SCREEN
+========================== */
+.vsContainer{
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  gap:80px;
+
+  animation:
+    vsZoom 0.5s ease;
+}
+
+.vsName{
+
+  font-size:42px;
+
+  text-align:center;
+
+  line-height:70px;
+
+  font-family:
+    'Press Start 2P',
+    cursive;
+
+  text-shadow:
+    0 0 20px currentColor;
+}
+
+.vsText{
+
+  font-size:90px;
+
+  color:white;
+
+  font-family:
+    'Press Start 2P',
+    cursive;
+
+  animation:
+    pulseVS 1s infinite alternate;
+}
+
+@keyframes pulseVS{
+
+  from{
+    transform:scale(1);
+  }
+
+  to{
+    transform:scale(1.08);
+  }
+
+}
+
+@keyframes vsZoom{
+
+  from{
+    opacity:0;
+    transform:scale(0.8);
+  }
+
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
+
+}
+
+/* ==========================
+   PLAYER SELECT STATES
+========================== */
+.selectedP1{
+
+  border:
+    3px solid #3b82f6 !important;
+
+  box-shadow:
+    0 0 40px #3b82f6 !important;
+
+  transform:
+    translateY(-8px)
+    scale(1.03);
+
+}
+
+.selectedP2{
+
+  border:
+    3px solid #ef4444 !important;
+
+  box-shadow:
+    0 0 40px #ef4444 !important;
+
+  transform:
+    translateY(-8px)
+    scale(1.03);
+
+}
