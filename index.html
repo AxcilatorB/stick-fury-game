@@ -11,11 +11,13 @@
 
   <title>Stick Fury</title>
 
+  <!-- FONT -->
   <link
     href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
     rel="stylesheet"
   />
 
+  <!-- CSS -->
   <link rel="stylesheet" href="output.css" />
   <link rel="stylesheet" href="style.css" />
 
@@ -151,13 +153,106 @@
   </div>
 
   <!-- ==========================
+       CATEGORY SELECT
+  =========================== -->
+  <div id="categorySelect" class="screen">
+
+    <div class="menuPanel categoryPanel">
+
+      <button
+        id="backToMenuBtn"
+        class="backButton"
+      >
+        ← BACK
+      </button>
+
+      <h1 class="gameTitle smallTitle">
+        SELECT CATEGORY
+      </h1>
+
+      <div class="categoryGrid">
+
+        <!-- ELEMENTAL -->
+        <div
+          id="elementalBtn"
+          class="categoryCard elementalCard"
+        >
+
+          <h2>ELEMENTAL</h2>
+
+          <p>
+            POWERFUL<br>
+            ELEMENTAL<br>
+            FIGHTERS
+          </p>
+
+        </div>
+
+        <!-- MEME -->
+        <div
+          id="memeBtn"
+          class="categoryCard memeCard"
+        >
+
+          <h2>MEME</h2>
+
+          <p>
+            CHAOTIC<br>
+            MEME<br>
+            WARRIORS
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ==========================
+       CHARACTER SELECT
+  =========================== -->
+  <div id="characterSelect" class="screen">
+
+    <div class="menuPanel characterPanel">
+
+      <button
+        id="backToCategoryBtn"
+        class="backButton"
+      >
+        ← BACK
+      </button>
+
+      <h1
+        id="characterTitle"
+        class="gameTitle smallTitle"
+      >
+        ELEMENTAL
+      </h1>
+
+      <div
+        id="fighterGrid"
+        class="fighterGrid"
+      >
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ==========================
        RESULT SCREEN
   =========================== -->
   <div id="resultScreen" class="screen">
 
     <div class="menuPanel">
 
-      <h1 id="endWinner" class="gameTitle">
+      <h1
+        id="endWinner"
+        class="gameTitle"
+      >
         PLAYER 1<br>
         WINS
       </h1>
@@ -166,7 +261,10 @@
         MATCH COMPLETE
       </p>
 
-      <button id="retryBtn" class="mainButton">
+      <button
+        id="retryBtn"
+        class="mainButton"
+      >
         REMATCH
       </button>
 

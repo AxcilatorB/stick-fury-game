@@ -424,3 +424,352 @@ body{
 .hidden{
   display:none !important;
 }
+
+/* ==========================
+   CATEGORY SELECT
+========================== */
+.categoryPanel{
+  min-width:900px;
+}
+
+.smallTitle{
+  font-size:38px;
+  line-height:60px;
+}
+
+.categoryGrid{
+  display:flex;
+  gap:40px;
+  justify-content:center;
+  margin-top:30px;
+}
+
+.categoryCard{
+  width:320px;
+  height:340px;
+
+  border-radius:18px;
+
+  cursor:pointer;
+
+  transition:0.25s;
+
+  display:flex;
+  flex-direction:column;
+
+  align-items:center;
+  justify-content:center;
+
+  text-align:center;
+
+  position:relative;
+
+  overflow:hidden;
+}
+
+.categoryCard:hover{
+  transform:
+    scale(1.05);
+
+  box-shadow:
+    0 0 30px rgba(255,255,255,0.25);
+}
+
+.categoryCard h2{
+  font-size:28px;
+
+  margin-bottom:25px;
+
+  font-family:
+    'Press Start 2P',
+    cursive;
+}
+
+.categoryCard p{
+  font-size:12px;
+
+  line-height:28px;
+
+  font-family:
+    'Press Start 2P',
+    cursive;
+}
+
+/* ELEMENTAL */
+.elementalCard{
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(0,255,255,0.2),
+      rgba(0,0,0,0.85)
+    );
+
+  border:
+    2px solid #67e8f9;
+}
+
+.elementalCard h2{
+  color:#67e8f9;
+}
+
+.elementalCard::before{
+  content:"";
+
+  position:absolute;
+  inset:0;
+
+  background:
+    radial-gradient(
+      circle at top,
+      rgba(0,255,255,0.25),
+      transparent 60%
+    );
+
+  animation:
+    elementalGlow 3s infinite alternate;
+}
+
+@keyframes elementalGlow{
+
+  from{
+    opacity:0.5;
+  }
+
+  to{
+    opacity:1;
+  }
+
+}
+
+/* MEME */
+.memeCard{
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,200,0,0.18),
+      rgba(0,0,0,0.85)
+    );
+
+  border:
+    2px solid #facc15;
+}
+
+.memeCard h2{
+  color:#facc15;
+}
+
+.memeCard::before{
+  content:"😂";
+
+  position:absolute;
+
+  top:18px;
+  right:20px;
+
+  font-size:32px;
+
+  opacity:0.25;
+
+  transform:
+    rotate(12deg);
+}
+
+/* HIDDEN */
+.hidden{
+  display:none !important;
+}
+
+/* ==========================
+   CHARACTER SELECT
+========================== */
+.characterPanel{
+  min-width:1100px;
+}
+
+.fighterGrid{
+  display:flex;
+  gap:30px;
+  justify-content:center;
+  flex-wrap:wrap;
+
+  margin-top:30px;
+}
+
+.fighterCard{
+  width:260px;
+  height:360px;
+
+  background:
+    rgba(0,0,0,0.55);
+
+  border:
+    2px solid white;
+
+  border-radius:
+    18px;
+
+  cursor:pointer;
+
+  transition:0.25s;
+
+  display:flex;
+  flex-direction:column;
+
+  align-items:center;
+  justify-content:center;
+
+  text-align:center;
+
+  padding:20px;
+
+  position:relative;
+
+  overflow:hidden;
+}
+
+.fighterCard:hover{
+
+  transform:
+    translateY(-8px)
+    scale(1.03);
+
+  box-shadow:
+    0 0 25px rgba(255,255,255,0.22);
+
+}
+
+.fighterPortrait{
+
+  width:120px;
+  height:120px;
+
+  border-radius:50%;
+
+  margin-bottom:25px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,255,255,0.18),
+      transparent
+    );
+
+  border:
+    2px solid rgba(255,255,255,0.2);
+}
+
+.fighterCard h2{
+
+  font-size:18px;
+
+  margin-bottom:18px;
+
+  line-height:28px;
+
+  font-family:
+    'Press Start 2P',
+    cursive;
+}
+
+.fighterCard p{
+
+  font-size:10px;
+
+  line-height:24px;
+
+  color:#ddd;
+
+  font-family:
+    'Press Start 2P',
+    cursive;
+}
+
+/* ==========================
+   BACK BUTTON
+========================== */
+.backButton{
+
+  position:absolute;
+
+  top:25px;
+  left:25px;
+
+  background:
+    rgba(0,0,0,0.5);
+
+  border:
+    2px solid #d4af37;
+
+  color:#f5d76e;
+
+  padding:
+    12px 18px;
+
+  border-radius:
+    12px;
+
+  cursor:pointer;
+
+  font-size:12px;
+
+  font-family:
+    'Press Start 2P',
+    cursive;
+
+  transition:0.2s;
+}
+
+.backButton:hover{
+
+  transform:
+    scale(1.05);
+
+  box-shadow:
+    0 0 20px rgba(255,215,0,0.4);
+
+}
+
+
+/* ==========================
+   FIGHTER IMAGE
+========================== */
+.fighterImage{
+
+  width:140px;
+  height:140px;
+
+  object-fit:contain;
+
+  margin-bottom:20px;
+
+  image-rendering:
+    pixelated;
+
+  filter:
+    drop-shadow(
+      0 0 12px rgba(255,255,255,0.2)
+    );
+}
+
+
+/* ==========================
+   FIGHTER CARD IMPROVEMENTS
+========================== */
+.fighterCard{
+
+  justify-content:flex-start;
+
+  padding-top:35px;
+}
+
+.fighterCard h2{
+
+  min-height:60px;
+}
+
+.fighterCard p{
+
+  margin-top:10px;
+}

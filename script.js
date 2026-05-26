@@ -61,7 +61,6 @@ const spSound =
 // ==========================
 const gravity = 0.8;
 const ground = 650;
-const speed = 5;
 const frameSpeed = 8;
 
 
@@ -126,6 +125,11 @@ function createPlayer(x){
     velocityY:0,
 
     hp:150,
+    maxHP:150,
+
+    fighter:null,
+
+    speed:5,
 
     jumping:false,
 
@@ -217,9 +221,6 @@ function gameOver(loser){
 
   setTimeout(()=>{
 
-    // ==========================
-    // MATCH WIN
-    // ==========================
     if(p1Rounds >= 2){
 
       resultScreen.classList.add(
@@ -250,9 +251,6 @@ function gameOver(loser){
 
     }
 
-    // ==========================
-    // NEXT ROUND
-    // ==========================
     nextRound();
 
   },2000);
@@ -275,8 +273,8 @@ function nextRound(){
   player2.x = 1050;
   player2.y = ground;
 
-  player1.hp = 150;
-  player2.hp = 150;
+  player1.hp = player1.maxHP;
+  player2.hp = player2.maxHP;
 
   player1.dead = false;
   player2.dead = false;
@@ -434,7 +432,7 @@ function updatePlayer(player, controls){
 
     if(keys[controls.left]){
 
-      player.x -= speed;
+      player.x -= player.speed;
 
       moving = true;
 
@@ -444,7 +442,7 @@ function updatePlayer(player, controls){
 
     if(keys[controls.right]){
 
-      player.x += speed;
+      player.x += player.speed;
 
       moving = true;
 
@@ -674,13 +672,11 @@ function applyPositions(){
 // ==========================
 function updateHP(){
 
-  const maxHP = 150;
-
   const p1Percent =
-    (player1.hp / maxHP) * 100;
+    (player1.hp / player1.maxHP) * 100;
 
   const p2Percent =
-    (player2.hp / maxHP) * 100;
+    (player2.hp / player2.maxHP) * 100;
 
   p1HPBar.style.width =
     p1Percent + "%";
