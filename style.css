@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+.character{
+  width:220px;
+  height:220px;
+
+  position:absolute;
+
+  background-size:contain;
+  background-repeat:no-repeat;
+  background-position:center;
+
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
