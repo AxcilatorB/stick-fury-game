@@ -1,36 +1,71 @@
 // ==========================
-// UI
+// GAME STATE
+// ==========================
+let gameState = "MENU";
+
+
+// ==========================
+// UI ELEMENTS
+// ==========================
+const mainMenu =
+  document.getElementById("mainMenu");
+
+const resultScreen =
+  document.getElementById("resultScreen");
+
+const playBtn =
+  document.getElementById("playBtn");
+
+
+// ==========================
+// MENU TOGGLE
 // ==========================
 let menuVisible = true;
 
-// MENU TOGGLE
 menuBtn.addEventListener("click",()=>{
 
   menuVisible = !menuVisible;
 
   if(menuVisible){
 
-    controlsMenu.style.display = "block";
-    menuBtn.innerHTML = "Hide Controls";
+    controlsMenu.style.display =
+      "block";
+
+    menuBtn.innerHTML =
+      "Hide Controls";
 
   }else{
 
-    controlsMenu.style.display = "none";
-    menuBtn.innerHTML = "Show Controls";
+    controlsMenu.style.display =
+      "none";
+
+    menuBtn.innerHTML =
+      "Show Controls";
 
   }
 
 });
 
-// START BUTTON
-startBtn.addEventListener("click",()=>{
 
-  startScreen.style.display = "none";
+// ==========================
+// PLAY BUTTON
+// ==========================
+playBtn.addEventListener("click",()=>{
+
+  mainMenu.classList.remove(
+    "activeScreen"
+  );
+
   gameStarted = true;
+
+  gameState = "FIGHTING";
 
 });
 
-// RETRY
+
+// ==========================
+// RETRY BUTTON
+// ==========================
 retryBtn.addEventListener("click",()=>{
 
   location.reload();

@@ -24,23 +24,14 @@ const p1Indicator =
 const p2Indicator =
   document.getElementById("p2Indicator");
 
-const startScreen =
-  document.getElementById("startScreen");
-
-const startBtn =
-  document.getElementById("startBtn");
-
 const roundText =
   document.getElementById("roundText");
 
-const endScreen =
-  document.getElementById("endScreen");
+const retryBtn =
+  document.getElementById("retryBtn");
 
 const endWinner =
   document.getElementById("endWinner");
-
-const retryBtn =
-  document.getElementById("retryBtn");
 
 
 // ==========================
@@ -226,9 +217,14 @@ function gameOver(loser){
 
   setTimeout(()=>{
 
+    // ==========================
+    // MATCH WIN
+    // ==========================
     if(p1Rounds >= 2){
 
-      endScreen.style.display = "flex";
+      resultScreen.classList.add(
+        "activeScreen"
+      );
 
       gameStarted = false;
 
@@ -241,7 +237,9 @@ function gameOver(loser){
 
     if(p2Rounds >= 2){
 
-      endScreen.style.display = "flex";
+      resultScreen.classList.add(
+        "activeScreen"
+      );
 
       gameStarted = false;
 
@@ -252,6 +250,9 @@ function gameOver(loser){
 
     }
 
+    // ==========================
+    // NEXT ROUND
+    // ==========================
     nextRound();
 
   },2000);

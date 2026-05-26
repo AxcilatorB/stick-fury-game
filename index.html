@@ -11,23 +11,21 @@
 
   <title>Stick Fury</title>
 
-  <!-- PIXEL FONT -->
   <link
     href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
     rel="stylesheet"
   />
 
-  <!-- TAILWIND -->
   <link rel="stylesheet" href="output.css" />
-
-  <!-- CSS -->
   <link rel="stylesheet" href="style.css" />
 
 </head>
 
 <body class="overflow-hidden bg-black">
 
-  <!-- GAME -->
+  <!-- ==========================
+       GAME
+  =========================== -->
   <div
     id="game"
     class="w-screen h-screen
@@ -40,7 +38,7 @@
     <div id="player1" class="character"></div>
     <div id="player2" class="character"></div>
 
-    <!-- INDICATORS -->
+    <!-- PLAYER INDICATORS -->
     <div id="p1Indicator" class="playerIndicator blueIndicator">
       <div class="indicatorArrow"></div>
       <div class="indicatorText">1P</div>
@@ -58,50 +56,55 @@
              bg-black/10"
     ></div>
 
-    <!-- HP -->
-    <div class="hpContainer left-5">
-      <div id="p1HP" class="hpBar"></div>
-    </div>
+    <!-- HUD -->
+    <div id="hud">
 
-    <div class="hpContainer right-5">
-      <div id="p2HP" class="hpBar"></div>
-    </div>
-
-    <!-- MENU BUTTON -->
-    <button id="menuBtn" class="menuBtn">
-      Hide Controls
-    </button>
-
-    <!-- CONTROLS -->
-    <div id="controlsMenu" class="controlsMenu">
-
-      <div class="mb-4">
-        PLAYER 1
+      <!-- HP -->
+      <div class="hpContainer left-5">
+        <div id="p1HP" class="hpBar"></div>
       </div>
 
-      A/D = MOVE<br>
-      W = JUMP<br>
-      F = PUNCH<br>
-      G = KICK<br>
-      T = SPECIAL<br>
-      R = BLOCK<br><br>
-
-      <div class="mb-4">
-        PLAYER 2
+      <div class="hpContainer right-5">
+        <div id="p2HP" class="hpBar"></div>
       </div>
 
-      ← → = MOVE<br>
-      ↑ = JUMP<br>
-      , = PUNCH<br>
-      . = KICK<br>
-      P = SPECIAL<br>
-      / = BLOCK
+      <!-- ROUND -->
+      <div id="roundText" class="roundText">
+        ROUND 1
+      </div>
 
-    </div>
+      <!-- MENU BUTTON -->
+      <button id="menuBtn" class="menuBtn">
+        Hide Controls
+      </button>
 
-    <!-- ROUND -->
-    <div id="roundText" class="roundText">
-      ROUND 1
+      <!-- CONTROLS -->
+      <div id="controlsMenu" class="controlsMenu">
+
+        <div class="mb-4">
+          PLAYER 1
+        </div>
+
+        A/D = MOVE<br>
+        W = JUMP<br>
+        F = PUNCH<br>
+        G = KICK<br>
+        T = SPECIAL<br>
+        R = BLOCK<br><br>
+
+        <div class="mb-4">
+          PLAYER 2
+        </div>
+
+        ← → = MOVE<br>
+        ↑ = JUMP<br>
+        , = PUNCH<br>
+        . = KICK<br>
+        P = SPECIAL<br>
+        / = BLOCK
+
+      </div>
+
     </div>
 
     <!-- WINNER -->
@@ -109,45 +112,62 @@
 
   </div>
 
-  <!-- START SCREEN -->
-  <div id="startScreen" class="fullscreenMenu">
+  <!-- ==========================
+       MAIN MENU
+  =========================== -->
+  <div id="mainMenu" class="screen activeScreen">
+
+    <div class="menuParticles"></div>
 
     <div class="menuPanel">
 
-      <h1 class="titleText">
+      <h1 class="gameTitle">
         STICK<br>
         FURY
       </h1>
 
-      <p class="subText">
-        ENTER THE ARENA<br>
-        DEFEAT YOUR OPPONENT
+      <p class="menuSubtitle">
+        ENTER THE ARENA
       </p>
 
-      <button id="startBtn" class="mainButton">
-        PLAY
-      </button>
+      <div class="menuButtons">
+
+        <button id="playBtn" class="mainButton">
+          PLAY
+        </button>
+
+        <button class="mainButton secondaryButton">
+          SETTINGS
+        </button>
+
+        <button class="mainButton secondaryButton">
+          CREDITS
+        </button>
+
+      </div>
 
     </div>
 
   </div>
 
-  <!-- END SCREEN -->
-  <div id="endScreen" class="fullscreenMenu" style="display:none;">
+  <!-- ==========================
+       RESULT SCREEN
+  =========================== -->
+  <div id="resultScreen" class="screen">
 
     <div class="menuPanel">
 
-      <h1 id="endWinner" class="titleText">
+      <h1 id="endWinner" class="gameTitle">
         PLAYER 1<br>
         WINS
       </h1>
 
-      <p class="subText">
-        THE MATCH HAS ENDED
+      <p class="menuSubtitle">
+        MATCH COMPLETE
       </p>
 
       <button id="retryBtn" class="mainButton">
-        RETRY
+        REMATCH
       </button>
 
     </div>
