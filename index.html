@@ -52,17 +52,18 @@ https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap
   <div id="game">
 
     <!-- BACKGROUND -->
-    <img
-      src="assets/bg1.png"
-      id="bg"
-      style="
-        position:absolute;
-        width:100%;
-        height:100%;
-        object-fit:cover;
-        z-index:-5;
-      "
-    >
+  <img
+    src="assets/bg1.png"
+    id="bg"
+    style="
+      position:absolute;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      z-index:0;
+      pointer-events:none;
+    "
+  >
 
     <!-- PLAYER 1 -->
     <div
@@ -457,9 +458,9 @@ https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap
   ========================== -->
   <script src="content.js"></script>
 
-  <script src="script.js"></script>
-
   <script src="combat.js"></script>
+  
+  <script src="script.js"></script>
 
   <script src="ui.js"></script>
 

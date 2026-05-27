@@ -5,6 +5,41 @@ let projectiles = [];
 
 
 // ==========================
+// HIT PAUSE
+// ==========================
+var hitPaused = false;
+
+function hitPause(duration = 60){
+
+  hitPaused = true;
+
+  setTimeout(()=>{
+
+    hitPaused = false;
+
+  },duration);
+
+}
+
+
+// ==========================
+// SCREEN SHAKE
+// ==========================
+let shakeDuration = 0;
+let shakeStrength = 0;
+
+function screenShake(
+  strength = 8,
+  duration = 120
+){
+
+  shakeStrength = strength;
+  shakeDuration = duration;
+
+}
+
+
+// ==========================
 // ATTACK
 // ==========================
 function attack(
@@ -26,9 +61,7 @@ function attack(
     type
   );
 
-  // ==========================
   // SOUND
-  // ==========================
   if(type === "punch"){
 
     punchSound.currentTime = 0;
@@ -46,9 +79,6 @@ function attack(
 
   }
 
-  // ==========================
-  // DAMAGE DELAY
-  // ==========================
   setTimeout(()=>{
 
     let range =
@@ -61,9 +91,23 @@ function attack(
       ? 10
       : 16;
 
+    let knockback =
+      type === "punch"
+      ? 14
+      : 24;
+
+    let shakePower =
+      type === "punch"
+      ? 6
+      : 10;
+
     if(type === "jumpkick"){
 
       damage = 18;
+
+      knockback = 32;
+
+      shakePower = 14;
 
     }
 
@@ -71,9 +115,7 @@ function attack(
       attacker.fighter
       ?.damageMultiplier || 1;
 
-    // ==========================
-    // REAL HITBOX CHECK
-    // ==========================
+    // REAL HITBOX
     let xDistance =
       Math.abs(
         attacker.x - target.x
@@ -89,15 +131,24 @@ function attack(
       yDistance < 120
     ){
 
-      // ==========================
+      // HIT PAUSE
+      hitPause(60);
+
+      // SCREEN SHAKE
+      screenShake(
+        shakePower,
+        120
+      );
+
       // BLOCK
-      // ==========================
       if(target.blocking){
 
         blockSound.currentTime = 0;
         blockSound.play();
 
         damage *= 0.2;
+
+        knockback *= 0.35;
 
       }
 
@@ -110,8 +161,29 @@ function attack(
       }
 
       // ==========================
-      // HURT FLASH
+      // SMOOTH KNOCKBACK
       // ==========================
+      if(attacker.x < target.x){
+
+        target.velocityX =
+          knockback;
+
+      }else{
+
+        target.velocityX =
+          -knockback;
+
+      }
+
+      // AIR POP
+      if(type === "jumpkick"){
+
+        target.velocityY =
+          -6;
+
+      }
+
+      // HURT
       target.hurt = true;
 
       setAnimation(
@@ -135,11 +207,9 @@ function attack(
 
         }
 
-      },200);
+      },220);
 
-      // ==========================
       // DEATH
-      // ==========================
       if(target.hp <= 0){
 
         target.dead = true;
@@ -157,9 +227,7 @@ function attack(
 
   },120);
 
-  // ==========================
   // END ATTACK
-  // ==========================
   setTimeout(()=>{
 
     attacker.attacking = false;
@@ -294,9 +362,6 @@ function updateProjectiles(){
         ? player2
         : player1;
 
-      // ==========================
-      // REAL PROJECTILE HITBOX
-      // ==========================
       let xDistance =
         Math.abs(
           ball.x - target.x
@@ -312,6 +377,10 @@ function updateProjectiles(){
         yDistance < 120
       ){
 
+        hitPause(80);
+
+        screenShake(18,180);
+
         target.hp -= 20;
 
         if(target.hp < 0){
@@ -320,9 +389,19 @@ function updateProjectiles(){
 
         }
 
-        // ==========================
-        // HURT FLASH
-        // ==========================
+        // SPECIAL KNOCKBACK
+        if(ball.owner.x < target.x){
+
+          target.velocityX = 38;
+
+        }else{
+
+          target.velocityX = -38;
+
+        }
+
+        target.velocityY = -8;
+
         target.hurt = true;
 
         setAnimation(
@@ -346,9 +425,8 @@ function updateProjectiles(){
 
           }
 
-        },200);
+        },220);
 
-        // REMOVE PROJECTILE
         ball.element.remove();
 
         projectiles.splice(
@@ -356,7 +434,6 @@ function updateProjectiles(){
           1
         );
 
-        // DEATH
         if(target.hp <= 0){
 
           target.dead = true;
@@ -372,9 +449,7 @@ function updateProjectiles(){
 
       }
 
-      // ==========================
       // REMOVE OFFSCREEN
-      // ==========================
       if(
         ball.x < -100 ||
         ball.x > window.innerWidth + 100

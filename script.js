@@ -132,6 +132,9 @@ function createPlayer(x){
 
     velocityY:0,
 
+    // NEW
+    velocityX:0,
+
     hp:150,
     maxHP:150,
 
@@ -243,8 +246,6 @@ window.addEventListener(
   "keydown",
   (e)=>{
 
-    // FIX:
-    // IGNORE HELD KEY REPEATS
     if(e.repeat) return;
 
     let key =
@@ -305,6 +306,7 @@ window.addEventListener(
   }
 );
 
+
 // ==========================
 // GAME OVER
 // ==========================
@@ -319,9 +321,6 @@ function gameOver(loser){
 
   gameOverSound.play();
 
-  // ==========================
-  // ROUND WIN
-  // ==========================
   if(loser === player1){
 
     p2Rounds++;
@@ -344,9 +343,7 @@ function gameOver(loser){
     "hidden"
   );
 
-  // ==========================
   // BEST OF 3
-  // ==========================
   if(p1Rounds >= 2){
 
     setTimeout(()=>{
@@ -354,10 +351,8 @@ function gameOver(loser){
       winnerText.innerHTML =
         "PLAYER 1 WINS MATCH";
 
-      // STOP GAME
       gameStarted = false;
 
-      // SHOW RESULT SCREEN
       resultScreen.classList.add(
         "activeScreen"
       );
@@ -378,10 +373,8 @@ function gameOver(loser){
       winnerText.innerHTML =
         "PLAYER 2 WINS MATCH";
 
-      // STOP GAME
       gameStarted = false;
 
-      // SHOW RESULT SCREEN
       resultScreen.classList.add(
         "activeScreen"
       );
@@ -395,9 +388,6 @@ function gameOver(loser){
 
   }
 
-  // ==========================
-  // NEXT ROUND
-  // ==========================
   setTimeout(()=>{
 
     nextRound();
@@ -423,6 +413,9 @@ function nextRound(){
 
   player2.x = 1050;
   player2.y = ground;
+
+  player1.velocityX = 0;
+  player2.velocityX = 0;
 
   player1.hp =
     player1.maxHP;
@@ -596,6 +589,19 @@ function updatePlayer(
 ){
 
   let moving = false;
+
+  // ==========================
+  // KNOCKBACK PHYSICS
+  // ==========================
+  player.x += player.velocityX;
+
+  player.velocityX *= 0.82;
+
+  if(Math.abs(player.velocityX) < 0.2){
+
+    player.velocityX = 0;
+
+  }
 
   if(player.dashCooldown > 0){
 
@@ -941,6 +947,31 @@ function applyPositions(){
       Math.min(player2.x,maxX)
     );
 
+  // SCREEN SHAKE
+  if(shakeDuration > 0){
+
+    shakeDuration -= 16;
+
+    const offsetX =
+      (Math.random() - 0.5)
+      * shakeStrength;
+
+    const offsetY =
+      (Math.random() - 0.5)
+      * shakeStrength;
+
+    game.style.transform =
+      `translate(${offsetX}px, ${offsetY}px)`;
+
+  }
+
+  else{
+
+    game.style.transform =
+      "translate(0px,0px)";
+
+  }
+
   p1.style.left =
     player1.x + "px";
 
@@ -1008,6 +1039,13 @@ function updateHP(){
 // LOOP
 // ==========================
 function loop(){
+
+  if(hitPaused){
+
+    requestAnimationFrame(loop);
+    return;
+
+  }
 
   if(gameStarted){
 
