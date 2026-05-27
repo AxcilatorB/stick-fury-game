@@ -1,87 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
 
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
+    content="
+      width=device-width,
+      initial-scale=1.0
+    "
+  >
 
-  <title>Stick Fury</title>
+  <title>
+    Stick Fury
+  </title>
 
   <!-- FONT -->
   <link
-    href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="
+https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap
+    "
     rel="stylesheet"
-  />
+  >
 
   <!-- CSS -->
-  <link rel="stylesheet" href="output.css" />
-  <link rel="stylesheet" href="style.css" />
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
 
 </head>
 
-<body class="overflow-hidden bg-black">
+<body>
 
   <!-- ==========================
        GAME
-  =========================== -->
-  <div
-    id="game"
-    class="w-screen h-screen
-           relative overflow-hidden
-           bg-cover bg-center"
-    style="background-image:url('assets/bg2.png')"
-  >
+  ========================== -->
+  <div id="game">
 
-    <!-- PLAYERS -->
-    <div id="player1" class="character"></div>
-    <div id="player2" class="character"></div>
+    <!-- BACKGROUND -->
+    <img
+      src="assets/bg1.png"
+      id="bg"
+      style="
+        position:absolute;
+        width:100%;
+        height:100%;
+        object-fit:cover;
+        z-index:-5;
+      "
+    >
 
-    <!-- PLAYER INDICATORS -->
-    <div id="p1Indicator" class="playerIndicator blueIndicator">
-      <div class="indicatorArrow"></div>
-      <div class="indicatorText">1P</div>
-    </div>
-
-    <div id="p2Indicator" class="playerIndicator redIndicator">
-      <div class="indicatorArrow"></div>
-      <div class="indicatorText">2P</div>
-    </div>
-
-    <!-- FLOOR -->
+    <!-- PLAYER 1 -->
     <div
-      class="absolute bottom-0
-             w-full h-32
-             bg-black/10"
+      id="p1"
+      class="character"
     ></div>
 
-    <!-- HUD -->
+    <!-- PLAYER 2 -->
+    <div
+      id="p2"
+      class="character"
+    ></div>
+
+
+    <!-- ==========================
+         PLAYER INDICATORS
+    ========================== -->
+    <div
+      id="p1Indicator"
+      class="
+        playerIndicator
+        blueIndicator
+      "
+    >
+      <div class="indicatorArrow"></div>
+
+      <div class="indicatorText">
+        P1
+      </div>
+    </div>
+
+    <div
+      id="p2Indicator"
+      class="
+        playerIndicator
+        redIndicator
+      "
+    >
+      <div class="indicatorArrow"></div>
+
+      <div class="indicatorText">
+        P2
+      </div>
+    </div>
+
+
+    <!-- ==========================
+         HUD
+    ========================== -->
     <div id="hud">
 
-      <!-- HP -->
-      <div class="hpContainer left-5">
-        <div id="p1HP" class="hpBar"></div>
+      <!-- PLAYER 1 HUD -->
+      <div class="playerHUD leftHUD">
+
+        <div
+          id="p1NameTag"
+          class="fighterName"
+        >
+          PLAYER 1
+        </div>
+
+        <div class="hpContainer">
+
+          <div
+            id="p1HP"
+            class="hpBar"
+          ></div>
+
+        </div>
+
       </div>
 
-      <div class="hpContainer right-5">
-        <div id="p2HP" class="hpBar"></div>
+      <!-- PLAYER 2 HUD -->
+      <div class="playerHUD rightHUD">
+
+        <div
+          id="p2NameTag"
+          class="fighterName"
+        >
+          PLAYER 2
+        </div>
+
+        <div class="hpContainer">
+
+          <div
+            id="p2HP"
+            class="hpBar"
+          ></div>
+
+        </div>
+
       </div>
 
       <!-- ROUND -->
-      <div id="roundText" class="roundText">
+      <div
+        id="roundText"
+        class="roundText"
+      >
         ROUND 1
       </div>
 
       <!-- MENU BUTTON -->
-      <button id="menuBtn" class="menuBtn">
+      <button
+        id="menuBtn"
+        class="menuBtn"
+      >
         Hide Controls
       </button>
 
       <!-- CONTROLS -->
-      <div id="controlsMenu" class="controlsMenu">
+      <div
+        id="controlsMenu"
+        class="controlsMenu"
+      >
 
         <div class="mb-4">
           PLAYER 1
@@ -109,17 +204,33 @@
 
     </div>
 
-    <!-- WINNER -->
-    <div id="winnerText" class="winnerText hidden"></div>
+
+    <!-- ==========================
+         WINNER TEXT
+    ========================== -->
+    <div
+      id="winnerText"
+      class="
+        winnerText
+        hidden
+      "
+    >
+      PLAYER 1 WINS
+    </div>
 
   </div>
 
+
   <!-- ==========================
        MAIN MENU
-  =========================== -->
-  <div id="mainMenu" class="screen activeScreen">
-
-    <div class="menuParticles"></div>
+  ========================== -->
+  <div
+    id="mainMenu"
+    class="
+      screen
+      activeScreen
+    "
+  >
 
     <div class="menuPanel">
 
@@ -128,22 +239,17 @@
         FURY
       </h1>
 
-      <p class="menuSubtitle">
-        ENTER THE ARENA
-      </p>
+      <div class="menuSubtitle">
+        ELEMENTAL ARCADE FIGHTER
+      </div>
 
       <div class="menuButtons">
 
-        <button id="playBtn" class="mainButton">
+        <button
+          id="playBtn"
+          class="mainButton"
+        >
           PLAY
-        </button>
-
-        <button class="mainButton secondaryButton">
-          SETTINGS
-        </button>
-
-        <button class="mainButton secondaryButton">
-          CREDITS
         </button>
 
       </div>
@@ -152,12 +258,21 @@
 
   </div>
 
+
   <!-- ==========================
        CATEGORY SELECT
-  =========================== -->
-  <div id="categorySelect" class="screen">
+  ========================== -->
+  <div
+    id="categorySelect"
+    class="screen"
+  >
 
-    <div class="menuPanel categoryPanel">
+    <div
+      class="
+        menuPanel
+        categoryPanel
+      "
+    >
 
       <button
         id="backToMenuBtn"
@@ -168,7 +283,10 @@
 
       <h1
         id="categoryTitle"
-        class="gameTitle smallTitle"
+        class="
+          gameTitle
+          smallTitle
+        "
       >
         PLAYER 1 CATEGORY
       </h1>
@@ -178,15 +296,21 @@
         <!-- ELEMENTAL -->
         <div
           id="elementalBtn"
-          class="categoryCard elementalCard"
+          class="
+            categoryCard
+            elementalCard
+          "
         >
 
-          <h2>ELEMENTAL</h2>
+          <h2>
+            ELEMENTAL
+          </h2>
 
           <p>
-            POWERFUL<br>
-            ELEMENTAL<br>
-            FIGHTERS
+            Thunder<br>
+            Fire<br>
+            Ice<br>
+            Shadow
           </p>
 
         </div>
@@ -194,15 +318,21 @@
         <!-- MEME -->
         <div
           id="memeBtn"
-          class="categoryCard memeCard"
+          class="
+            categoryCard
+            memeCard
+          "
         >
 
-          <h2>MEME</h2>
+          <h2>
+            MEME
+          </h2>
 
           <p>
-            CHAOTIC<br>
-            MEME<br>
-            WARRIORS
+            Shiba<br>
+            Banana<br>
+            Sigma<br>
+            Chill
           </p>
 
         </div>
@@ -213,12 +343,21 @@
 
   </div>
 
+
   <!-- ==========================
        CHARACTER SELECT
-  =========================== -->
-  <div id="characterSelect" class="screen">
+  ========================== -->
+  <div
+    id="characterSelect"
+    class="screen"
+  >
 
-    <div class="menuPanel characterPanel">
+    <div
+      class="
+        menuPanel
+        characterPanel
+      "
+    >
 
       <button
         id="backToCategoryBtn"
@@ -229,26 +368,31 @@
 
       <h1
         id="characterTitle"
-        class="gameTitle smallTitle"
+        class="
+          gameTitle
+          smallTitle
+        "
       >
-        ELEMENTAL
+        PLAYER 1 SELECT
       </h1>
 
       <div
         id="fighterGrid"
         class="fighterGrid"
-      >
-
-      </div>
+      ></div>
 
     </div>
 
   </div>
 
+
   <!-- ==========================
-     VS SCREEN
+       VS SCREEN
   ========================== -->
-  <div id="vsScreen" class="screen">
+  <div
+    id="vsScreen"
+    class="screen"
+  >
 
     <div class="vsContainer">
 
@@ -274,41 +418,50 @@
 
   </div>
 
+
   <!-- ==========================
        RESULT SCREEN
-  =========================== -->
-  <div id="resultScreen" class="screen">
+  ========================== -->
+  <div
+    id="resultScreen"
+    class="screen"
+  >
 
     <div class="menuPanel">
 
       <h1
-        id="endWinner"
+        id="resultText"
         class="gameTitle"
       >
-        PLAYER 1<br>
-        WINS
+        PLAYER 1 WINS
       </h1>
 
-      <p class="menuSubtitle">
-        MATCH COMPLETE
-      </p>
+      <div class="menuButtons">
 
-      <button
-        id="retryBtn"
-        class="mainButton"
-      >
-        REMATCH
-      </button>
+        <button
+          id="retryBtn"
+          class="mainButton"
+        >
+          PLAY AGAIN
+        </button>
+
+      </div>
 
     </div>
 
   </div>
 
-  <!-- SCRIPTS -->
+
+  <!-- ==========================
+       SCRIPTS
+  ========================== -->
   <script src="content.js"></script>
-  <script src="combat.js"></script>
-  <script src="ui.js"></script>
+
   <script src="script.js"></script>
+
+  <script src="combat.js"></script>
+
+  <script src="ui.js"></script>
 
 </body>
 </html>

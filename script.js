@@ -3,20 +3,17 @@
 // ==========================
 const game = document.getElementById("game");
 
-const p1 = document.getElementById("player1");
-const p2 = document.getElementById("player2");
+const p1 = document.getElementById("p1");
+const p2 = document.getElementById("p2");
 
-const p1HPBar = document.getElementById("p1HP");
-const p2HPBar = document.getElementById("p2HP");
+const p1HPBar =
+  document.getElementById("p1HP");
+
+const p2HPBar =
+  document.getElementById("p2HP");
 
 const winnerText =
   document.getElementById("winnerText");
-
-const controlsMenu =
-  document.getElementById("controlsMenu");
-
-const menuBtn =
-  document.getElementById("menuBtn");
 
 const p1Indicator =
   document.getElementById("p1Indicator");
@@ -26,12 +23,6 @@ const p2Indicator =
 
 const roundText =
   document.getElementById("roundText");
-
-const retryBtn =
-  document.getElementById("retryBtn");
-
-const endWinner =
-  document.getElementById("endWinner");
 
 
 // ==========================
@@ -60,7 +51,9 @@ const spSound =
 // SETTINGS
 // ==========================
 const gravity = 0.8;
+
 const ground = 650;
+
 const frameSpeed = 8;
 
 
@@ -75,41 +68,56 @@ let gameStarted = false;
 // ==========================
 let keys = {};
 
-window.addEventListener("keydown",(e)=>{
-  keys[e.key.toLowerCase()] = true;
-});
+window.addEventListener(
+  "keydown",
+  (e)=>{
 
-window.addEventListener("keyup",(e)=>{
+    keys[e.key.toLowerCase()] = true;
 
-  keys[e.key.toLowerCase()] = false;
+  }
+);
 
-  let key = e.key.toLowerCase();
+window.addEventListener(
+  "keyup",
+  (e)=>{
 
-  if(key === "r"){
+    keys[e.key.toLowerCase()] = false;
 
-    player1.blocking = false;
+    let key =
+      e.key.toLowerCase();
 
-    if(!player1.dead){
+    if(key === "r"){
 
-      setAnimation(player1,"idle");
+      player1.blocking = false;
+
+      if(!player1.dead){
+
+        setAnimation(
+          player1,
+          "idle"
+        );
+
+      }
+
+    }
+
+    if(key === "/"){
+
+      player2.blocking = false;
+
+      if(!player2.dead){
+
+        setAnimation(
+          player2,
+          "idle"
+        );
+
+      }
 
     }
 
   }
-
-  if(key === "/"){
-
-    player2.blocking = false;
-
-    if(!player2.dead){
-
-      setAnimation(player2,"idle");
-
-    }
-
-  }
-
-});
+);
 
 
 // ==========================
@@ -145,7 +153,9 @@ function createPlayer(x){
     currentAnimation:"idle",
 
     frame:0,
-    frameTimer:0
+    frameTimer:0,
+
+    dashCooldown:0
 
   };
 
@@ -155,9 +165,11 @@ function createPlayer(x){
 // ==========================
 // PLAYERS
 // ==========================
-const player1 = createPlayer(450);
+const player1 =
+  createPlayer(450);
 
-const player2 = createPlayer(1050);
+const player2 =
+  createPlayer(1050);
 
 player2.facingLeft = true;
 
@@ -174,11 +186,18 @@ let roundOver = false;
 // ==========================
 // SET ANIMATION
 // ==========================
-function setAnimation(data, animation){
+function setAnimation(
+  data,
+  animation
+){
 
-  if(data.currentAnimation !== animation){
+  if(
+    data.currentAnimation !==
+    animation
+  ){
 
-    data.currentAnimation = animation;
+    data.currentAnimation =
+      animation;
 
     data.frame = 0;
 
@@ -190,6 +209,103 @@ function setAnimation(data, animation){
 
 
 // ==========================
+// DASH
+// ==========================
+function dash(player,direction){
+
+  if(player.dashCooldown > 0)
+  return;
+
+  if(
+    player.attacking ||
+    player.hurt ||
+    player.blocking ||
+    player.dead
+  ) return;
+
+  player.dashCooldown = 30;
+
+  player.x += direction * 160;
+
+}
+
+
+// ==========================
+// DOUBLE TAP DASH
+// ==========================
+let lastA = 0;
+let lastD = 0;
+
+let lastLeft = 0;
+let lastRight = 0;
+
+window.addEventListener(
+  "keydown",
+  (e)=>{
+
+    // FIX:
+    // IGNORE HELD KEY REPEATS
+    if(e.repeat) return;
+
+    let key =
+      e.key.toLowerCase();
+
+    let now = Date.now();
+
+    // PLAYER 1
+    if(key === "a"){
+
+      if(now - lastA < 250){
+
+        dash(player1,-1);
+
+      }
+
+      lastA = now;
+
+    }
+
+    if(key === "d"){
+
+      if(now - lastD < 250){
+
+        dash(player1,1);
+
+      }
+
+      lastD = now;
+
+    }
+
+    // PLAYER 2
+    if(key === "arrowleft"){
+
+      if(now - lastLeft < 250){
+
+        dash(player2,-1);
+
+      }
+
+      lastLeft = now;
+
+    }
+
+    if(key === "arrowright"){
+
+      if(now - lastRight < 250){
+
+        dash(player2,1);
+
+      }
+
+      lastRight = now;
+
+    }
+
+  }
+);
+
+// ==========================
 // GAME OVER
 // ==========================
 function gameOver(loser){
@@ -198,9 +314,14 @@ function gameOver(loser){
 
   roundOver = true;
 
-  gameOverSound.currentTime = 0.35;
+  gameOverSound.currentTime =
+    0.35;
+
   gameOverSound.play();
 
+  // ==========================
+  // ROUND WIN
+  // ==========================
   if(loser === player1){
 
     p2Rounds++;
@@ -208,7 +329,9 @@ function gameOver(loser){
     winnerText.innerHTML =
       "PLAYER 2 WINS ROUND";
 
-  }else{
+  }
+
+  else{
 
     p1Rounds++;
 
@@ -217,39 +340,65 @@ function gameOver(loser){
 
   }
 
-  winnerText.classList.remove("hidden");
+  winnerText.classList.remove(
+    "hidden"
+  );
 
-  setTimeout(()=>{
+  // ==========================
+  // BEST OF 3
+  // ==========================
+  if(p1Rounds >= 2){
 
-    if(p1Rounds >= 2){
+    setTimeout(()=>{
 
+      winnerText.innerHTML =
+        "PLAYER 1 WINS MATCH";
+
+      // STOP GAME
+      gameStarted = false;
+
+      // SHOW RESULT SCREEN
       resultScreen.classList.add(
         "activeScreen"
       );
-
-      gameStarted = false;
 
       endWinner.innerHTML =
         "PLAYER 1<br>WINS";
 
-      return;
+    },1000);
 
-    }
+    return;
 
-    if(p2Rounds >= 2){
+  }
 
+  if(p2Rounds >= 2){
+
+    setTimeout(()=>{
+
+      winnerText.innerHTML =
+        "PLAYER 2 WINS MATCH";
+
+      // STOP GAME
+      gameStarted = false;
+
+      // SHOW RESULT SCREEN
       resultScreen.classList.add(
         "activeScreen"
       );
 
-      gameStarted = false;
-
       endWinner.innerHTML =
         "PLAYER 2<br>WINS";
 
-      return;
+    },1000);
 
-    }
+    return;
+
+  }
+
+  // ==========================
+  // NEXT ROUND
+  // ==========================
+  setTimeout(()=>{
 
     nextRound();
 
@@ -265,7 +414,9 @@ function nextRound(){
 
   roundOver = false;
 
-  winnerText.classList.add("hidden");
+  winnerText.classList.add(
+    "hidden"
+  );
 
   player1.x = 450;
   player1.y = ground;
@@ -273,8 +424,11 @@ function nextRound(){
   player2.x = 1050;
   player2.y = ground;
 
-  player1.hp = player1.maxHP;
-  player2.hp = player2.maxHP;
+  player1.hp =
+    player1.maxHP;
+
+  player2.hp =
+    player2.maxHP;
 
   player1.dead = false;
   player2.dead = false;
@@ -324,111 +478,142 @@ function nextRound(){
 // ==========================
 // KEY INPUTS
 // ==========================
-window.addEventListener("keydown",(e)=>{
+window.addEventListener(
+  "keydown",
+  (e)=>{
 
-  let key = e.key.toLowerCase();
+    let key =
+      e.key.toLowerCase();
 
-  if(key === "r"){
+    if(key === "r"){
 
-    player1.blocking = true;
-    setAnimation(player1,"block");
+      player1.blocking = true;
 
-  }
-
-  if(key === "/"){
-
-    player2.blocking = true;
-    setAnimation(player2,"block");
-
-  }
-
-  if(key === "f"){
-
-    attack(player1,player2,"punch");
-
-  }
-
-  if(key === "g"){
-
-    if(player1.jumping){
-
-      attack(player1,player2,"jumpkick");
-
-    }else{
-
-      attack(player1,player2,"kick");
+      setAnimation(
+        player1,
+        "block"
+      );
 
     }
 
-  }
+    if(key === "/"){
 
-  if(key === ","){
+      player2.blocking = true;
 
-    attack(player2,player1,"punch");
-
-  }
-
-  if(key === "."){
-
-    if(player2.jumping){
-
-      attack(player2,player1,"jumpkick");
-
-    }else{
-
-      attack(player2,player1,"kick");
+      setAnimation(
+        player2,
+        "block"
+      );
 
     }
 
-  }
+    if(key === "f"){
 
-  if(key === "t"){
+      attack(
+        player1,
+        player2,
+        "punch"
+      );
 
-    specialMove(player1);
+    }
 
-  }
+    if(key === "g"){
 
-  if(key === "p"){
+      if(player1.jumping){
 
-    specialMove(player2);
+        attack(
+          player1,
+          player2,
+          "jumpkick"
+        );
 
-  }
+      }else{
 
-});
-
-
-// ==========================
-// UPDATE PLAYER
-// ==========================
-function updatePlayer(player, controls){
-
-  let moving = false;
-
-  if(player.dead){
-
-    if(player.y < ground){
-
-      player.y += player.velocityY;
-
-      player.velocityY += gravity;
-
-      if(player.y >= ground){
-
-        player.y = ground;
-
-        player.velocityY = 0;
+        attack(
+          player1,
+          player2,
+          "kick"
+        );
 
       }
 
     }
 
+    if(key === ","){
+
+      attack(
+        player2,
+        player1,
+        "punch"
+      );
+
+    }
+
+    if(key === "."){
+
+      if(player2.jumping){
+
+        attack(
+          player2,
+          player1,
+          "jumpkick"
+        );
+
+      }else{
+
+        attack(
+          player2,
+          player1,
+          "kick"
+        );
+
+      }
+
+    }
+
+    if(key === "t"){
+
+      specialMove(player1);
+
+    }
+
+    if(key === "p"){
+
+      specialMove(player2);
+
+    }
+
+  }
+);
+
+
+// ==========================
+// UPDATE PLAYER
+// ==========================
+function updatePlayer(
+  player,
+  controls
+){
+
+  let moving = false;
+
+  if(player.dashCooldown > 0){
+
+    player.dashCooldown--;
+
+  }
+
+  if(player.dead){
+
     return;
 
   }
 
-  if(!player.attacking &&
-     !player.hurt &&
-     !player.blocking){
+  if(
+    !player.attacking &&
+    !player.hurt &&
+    !player.blocking
+  ){
 
     if(keys[controls.left]){
 
@@ -452,10 +637,12 @@ function updatePlayer(player, controls){
 
   }
 
-  if(keys[controls.jump] &&
-     player.jumpCount < 2 &&
-     !player.blocking &&
-     !player.jumpPressed){
+  if(
+    keys[controls.jump] &&
+    player.jumpCount < 2 &&
+    !player.blocking &&
+    !player.jumpPressed
+  ){
 
     player.jumpPressed = true;
 
@@ -466,9 +653,13 @@ function updatePlayer(player, controls){
     player.velocityY = -15;
 
     jumpSound.currentTime = 0;
+
     jumpSound.play();
 
-    setAnimation(player,"jump");
+    setAnimation(
+      player,
+      "jump"
+    );
 
   }
 
@@ -480,9 +671,11 @@ function updatePlayer(player, controls){
 
   if(player.jumping){
 
-    player.y += player.velocityY;
+    player.y +=
+      player.velocityY;
 
-    player.velocityY += gravity;
+    player.velocityY +=
+      gravity;
 
     if(!player.attacking){
 
@@ -491,11 +684,13 @@ function updatePlayer(player, controls){
         player.frame = 0;
 
       }
+
       else if(player.velocityY < 5){
 
         player.frame = 1;
 
       }
+
       else{
 
         player.frame = 2;
@@ -514,10 +709,15 @@ function updatePlayer(player, controls){
 
       player.jumpCount = 0;
 
-      if(!player.attacking &&
-         !player.blocking){
+      if(
+        !player.attacking &&
+        !player.blocking
+      ){
 
-        setAnimation(player,"idle");
+        setAnimation(
+          player,
+          "idle"
+        );
 
       }
 
@@ -525,18 +725,26 @@ function updatePlayer(player, controls){
 
   }
 
-  if(!player.jumping &&
-     !player.attacking &&
-     !player.hurt &&
-     !player.blocking){
+  if(
+    !player.jumping &&
+    !player.attacking &&
+    !player.hurt &&
+    !player.blocking
+  ){
 
     if(moving){
 
-      setAnimation(player,"walk");
+      setAnimation(
+        player,
+        "walk"
+      );
 
     }else{
 
-      setAnimation(player,"idle");
+      setAnimation(
+        player,
+        "idle"
+      );
 
     }
 
@@ -548,57 +756,110 @@ function updatePlayer(player, controls){
 // ==========================
 // ANIMATE
 // ==========================
-function animate(element, player){
+function animate(
+  element,
+  player
+){
 
-  let currentFrameSpeed =
-    frameSpeed;
+  element.style.width = "220px";
+  element.style.height = "220px";
 
-  if(player.currentAnimation === "dead"){
+  element.style.position =
+    "absolute";
 
-    currentFrameSpeed = 20;
+  element.style.backgroundSize =
+    "contain";
 
-  }
+  element.style.backgroundRepeat =
+    "no-repeat";
 
-  if(player.currentAnimation !== "jump"){
+  element.style.backgroundPosition =
+    "center";
 
-    player.frameTimer++;
+  element.style.imageRendering =
+    "pixelated";
 
-    if(player.frameTimer >= currentFrameSpeed){
+  // DEFAULT STICKMAN
+  if(
+    player.fighter &&
+    player.fighter.id ===
+    "defaultStickman"
+  ){
 
-      player.frame++;
+    let currentFrameSpeed =
+      frameSpeed;
 
-      player.frameTimer = 0;
+    if(
+      player.currentAnimation ===
+      "dead"
+    ){
 
-      if(player.currentAnimation === "dead"){
+      currentFrameSpeed = 20;
 
-        if(player.frame >=
-           sprites.dead.length){
+    }
 
-          player.frame =
-            sprites.dead.length - 1;
+    if(
+      player.currentAnimation !==
+      "jump"
+    ){
+
+      player.frameTimer++;
+
+      if(
+        player.frameTimer >=
+        currentFrameSpeed
+      ){
+
+        player.frame++;
+
+        player.frameTimer = 0;
+
+        if(
+          player.currentAnimation ===
+          "dead"
+        ){
+
+          if(
+            player.frame >=
+            sprites.dead.length
+          ){
+
+            player.frame =
+              sprites.dead.length - 1;
+
+          }
 
         }
 
-      }
+        else if(
+          player.currentAnimation ===
+          "sp"
+        ){
 
-      else if(player.currentAnimation === "sp"){
+          if(
+            player.frame >=
+            sprites.sp.length
+          ){
 
-        if(player.frame >=
-           sprites.sp.length){
+            player.frame =
+              sprites.sp.length - 1;
 
-          player.frame =
-            sprites.sp.length - 1;
+          }
 
         }
 
-      }
+        else{
 
-      else{
+          if(
+            player.frame >=
+            sprites[
+              player.currentAnimation
+            ].length
+          ){
 
-        if(player.frame >=
-           sprites[player.currentAnimation].length){
+            player.frame = 0;
 
-          player.frame = 0;
+          }
 
         }
 
@@ -606,10 +867,54 @@ function animate(element, player){
 
     }
 
+    element.style.backgroundImage =
+      `url(${
+        sprites[
+          player.currentAnimation
+        ][player.frame]
+      })`;
+
+    element.style.backgroundColor =
+      "transparent";
+
+    element.innerHTML = "";
+
+    return;
+
   }
 
+  // PLACEHOLDER FIGHTERS
   element.style.backgroundImage =
-    `url(${sprites[player.currentAnimation][player.frame]})`;
+    "none";
+
+  element.style.background =
+    player.hurt
+    ? "white"
+    : player.fighter?.color ||
+      "white";
+
+  element.style.display = "flex";
+
+  element.style.alignItems =
+    "center";
+
+  element.style.justifyContent =
+    "center";
+
+  element.style.borderRadius =
+    "14px";
+
+  element.style.fontWeight =
+    "bold";
+
+  element.style.fontSize =
+    "18px";
+
+  element.style.color = "black";
+
+  element.innerHTML =
+    player.currentAnimation
+      .toUpperCase();
 
 }
 
@@ -620,15 +925,21 @@ function animate(element, player){
 function applyPositions(){
 
   const minX = 0;
-  const maxX = window.innerWidth - 220;
+
+  const maxX =
+    window.innerWidth - 220;
 
   player1.x =
-    Math.max(minX,
-    Math.min(player1.x, maxX));
+    Math.max(
+      minX,
+      Math.min(player1.x,maxX)
+    );
 
   player2.x =
-    Math.max(minX,
-    Math.min(player2.x, maxX));
+    Math.max(
+      minX,
+      Math.min(player2.x,maxX)
+    );
 
   p1.style.left =
     player1.x + "px";
@@ -673,10 +984,16 @@ function applyPositions(){
 function updateHP(){
 
   const p1Percent =
-    (player1.hp / player1.maxHP) * 100;
+    (
+      player1.hp /
+      player1.maxHP
+    ) * 100;
 
   const p2Percent =
-    (player2.hp / player2.maxHP) * 100;
+    (
+      player2.hp /
+      player2.maxHP
+    ) * 100;
 
   p1HPBar.style.width =
     p1Percent + "%";
@@ -709,6 +1026,7 @@ function loop(){
     updateProjectiles();
 
     animate(p1,player1);
+
     animate(p2,player2);
 
     applyPositions();

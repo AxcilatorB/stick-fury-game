@@ -1,14 +1,22 @@
+
+/* ==========================
+   BODY
+========================== */
 body{
   margin:0;
   overflow:hidden;
 
-  background:black;
+  font-family:
+    'Press Start 2P',
+    cursive;
 }
 
+
 /* ==========================
-   CHARACTER
+   CHARACTERS
 ========================== */
 .character{
+
   width:220px;
   height:220px;
 
@@ -24,185 +32,131 @@ body{
   z-index:20;
 }
 
+
 /* ==========================
-   SCREEN SYSTEM
+   SCREENS
 ========================== */
 .screen{
+
   position:fixed;
   inset:0;
+
+  background:
+    rgba(0,0,0,0.72);
+
+  backdrop-filter:
+    blur(4px);
 
   display:none;
 
   align-items:center;
   justify-content:center;
 
-  z-index:1000;
-
-  background:
-    linear-gradient(
-      rgba(0,0,0,0.5),
-      rgba(0,0,0,0.82)
-    ),
-    url('assets/bg2.png');
-
-  background-size:cover;
-  background-position:center;
+  z-index:500;
 }
 
 .activeScreen{
   display:flex;
 }
 
-/* ==========================
-   MENU PARTICLES
-========================== */
-.menuParticles{
-  position:absolute;
-  inset:0;
-
-  background:
-    radial-gradient(
-      circle at 20% 20%,
-      rgba(0,255,255,0.12),
-      transparent 20%
-    ),
-    radial-gradient(
-      circle at 80% 30%,
-      rgba(255,0,0,0.12),
-      transparent 20%
-    ),
-    radial-gradient(
-      circle at 50% 80%,
-      rgba(255,255,0,0.08),
-      transparent 25%
-    );
-
-  animation:floatBG 8s infinite alternate;
-}
-
-@keyframes floatBG{
-
-  from{
-    transform:scale(1) translateY(0px);
-  }
-
-  to{
-    transform:scale(1.05) translateY(-10px);
-  }
-
-}
 
 /* ==========================
    MENU PANEL
 ========================== */
 .menuPanel{
-  position:relative;
 
   background:
-    rgba(0,0,0,0.68);
+    rgba(0,0,0,0.82);
 
   border:
     2px solid #d4af37;
 
   border-radius:
-    18px;
+    24px;
 
   padding:
-    55px 75px;
+    50px;
 
-  text-align:center;
-
-  backdrop-filter:
-    blur(8px);
+  position:relative;
 
   box-shadow:
-    0 0 30px rgba(255,215,0,0.18);
+    0 0 40px rgba(255,215,0,0.18);
 
-  z-index:5;
+  text-align:center;
 }
 
+
 /* ==========================
-   TITLE
+   TITLES
 ========================== */
 .gameTitle{
+
   color:#f5d76e;
 
-  font-size:58px;
+  font-size:60px;
 
-  line-height:84px;
-
-  margin-bottom:30px;
-
-  font-family:
-    'Press Start 2P',
-    cursive;
+  line-height:90px;
 
   text-shadow:
-    0 0 12px rgba(255,215,0,0.45);
-
-  animation:titlePulse 2s infinite alternate;
+    0 0 18px rgba(255,215,0,0.45);
 }
 
-@keyframes titlePulse{
+.smallTitle{
 
-  from{
-    transform:scale(1);
-  }
+  font-size:36px;
 
-  to{
-    transform:scale(1.02);
-  }
+  line-height:60px;
 
+  margin-bottom:30px;
 }
 
-/* ==========================
-   SUBTITLE
-========================== */
 .menuSubtitle{
-  color:#ddd;
+
+  color:white;
+
+  margin-top:20px;
 
   margin-bottom:40px;
 
   font-size:12px;
 
-  line-height:24px;
-
-  font-family:
-    'Press Start 2P',
-    cursive;
+  opacity:0.8;
 }
+
 
 /* ==========================
    BUTTONS
 ========================== */
 .menuButtons{
+
   display:flex;
   flex-direction:column;
+
   gap:18px;
 }
 
 .mainButton{
+
   background:
     linear-gradient(
-      to bottom,
-      #b22222,
-      #7a1010
+      135deg,
+      #f5d76e,
+      #cfa93d
     );
 
-  color:white;
+  color:black;
 
-  border:
-    2px solid #f5d76e;
-
-  border-radius:
-    12px;
+  border:none;
 
   padding:
-    18px 42px;
+    18px 40px;
+
+  border-radius:
+    14px;
 
   cursor:pointer;
 
-  font-size:16px;
+  font-size:14px;
 
   font-family:
     'Press Start 2P',
@@ -217,136 +171,222 @@ body{
     scale(1.05);
 
   box-shadow:
-    0 0 25px rgba(255,215,0,0.45);
-
+    0 0 25px rgba(255,215,0,0.4);
 }
 
 .secondaryButton{
+
   background:
-    linear-gradient(
-      to bottom,
-      #1f2937,
-      #111827
-    );
+    rgba(255,255,255,0.08);
+
+  color:white;
+
+  border:
+    2px solid rgba(255,255,255,0.15);
 }
+
 
 /* ==========================
    HUD
 ========================== */
 #hud{
+
   position:absolute;
-  inset:0;
 
-  z-index:100;
-}
+  top:0;
+  left:0;
 
-/* HP */
-.hpContainer{
-  position:absolute;
-  top:20px;
-
-  width:300px;
-  height:24px;
-
-  border:2px solid white;
-
-  background:#3f3f46;
-
-  z-index:40;
-}
-
-.hpBar{
   width:100%;
-  height:100%;
 
-  background:#ef4444;
+  z-index:120;
+}
+
+
+/* ==========================
+   PLAYER HUD
+========================== */
+.playerHUD{
+
+  position:absolute;
+
+  top:18px;
+
+  width:420px;
+}
+
+.leftHUD{
+  left:20px;
+}
+
+.rightHUD{
+  right:20px;
+}
+
+
+/* ==========================
+   PLAYER NAME
+========================== */
+.fighterName{
+
+  font-size:12px;
+
+  margin-bottom:12px;
+
+  font-family:
+    'Press Start 2P',
+    cursive;
+
+  text-shadow:
+    0 0 10px currentColor;
+}
+
+.rightHUD .fighterName{
+  text-align:right;
+}
+
+
+/* ==========================
+   HP CONTAINER
+========================== */
+.hpContainer{
+
+  width:100%;
+  height:28px;
+
+  background:
+    rgba(0,0,0,0.7);
+
+  border:
+    3px solid rgba(255,255,255,0.2);
+
+  border-radius:
+    14px;
+
+  overflow:hidden;
+
+  box-shadow:
+    inset 0 0 15px rgba(0,0,0,0.6);
+}
+
+
+/* ==========================
+   HP BAR
+========================== */
+.hpBar{
+
+  height:100%;
+  width:100%;
+
+  background:white;
+
+  transition:
+    width 0.2s linear;
+
+  box-shadow:
+    0 0 15px currentColor;
+}
+
+
+/* ==========================
+   ROUND
+========================== */
+.roundText{
+
+  position:absolute;
+
+  top:18px;
+  left:50%;
+
+  transform:
+    translateX(-50%);
+
+  color:#9be7ff;
+
+  font-size:24px;
+
+  text-shadow:
+    0 0 12px #9be7ff;
+}
+
+
+/* ==========================
+   CONTROLS
+========================== */
+.menuBtn{
+
+  position:absolute;
+
+  left:20px;
+  top:110px;
+
+  background:
+    rgba(0,0,0,0.7);
+
+  border:
+    2px solid #67e8f9;
+
+  color:white;
+
+  padding:
+    14px 20px;
+
+  border-radius:
+    12px;
+
+  cursor:pointer;
+
+  font-family:
+    'Press Start 2P',
+    cursive;
+
+  font-size:12px;
 
   transition:0.2s;
 }
 
-/* ROUND */
-.roundText{
-  position:absolute;
+.menuBtn:hover{
 
-  top:20px;
-  left:50%;
+  transform:
+    scale(1.04);
 
-  transform:translateX(-50%);
-
-  color:#a5f3fc;
-
-  font-size:22px;
-
-  font-family:
-    'Press Start 2P',
-    cursive;
+  box-shadow:
+    0 0 18px rgba(0,255,255,0.3);
 }
 
-/* MENU BTN */
-.menuBtn{
-  position:absolute;
-
-  top:60px;
-  left:20px;
-
-  background:
-    rgba(0,0,0,0.6);
-
-  border:
-    1px solid #67e8f9;
-
-  color:#a5f3fc;
-
-  padding:
-    12px 16px;
-
-  border-radius:
-    10px;
-
-  font-family:
-    'Press Start 2P',
-    cursive;
-
-  cursor:pointer;
-}
-
-/* CONTROLS */
 .controlsMenu{
+
   position:absolute;
 
-  top:110px;
   left:20px;
+  top:170px;
+
+  width:270px;
 
   background:
-    rgba(0,0,0,0.55);
+    rgba(0,0,0,0.75);
 
   border:
-    1px solid #67e8f9;
+    2px solid rgba(255,255,255,0.15);
 
   border-radius:
-    12px;
+    16px;
 
   padding:
     18px;
 
   color:white;
 
-  font-size:10px;
+  font-size:11px;
 
-  line-height:30px;
-
-  font-family:
-    'Press Start 2P',
-    cursive;
-
-  backdrop-filter:
-    blur(6px);
+  line-height:32px;
 }
 
+
 /* ==========================
-   WINNER
+   WINNER TEXT
 ========================== */
 .winnerText{
+
   position:absolute;
 
   top:50%;
@@ -355,100 +395,90 @@ body{
   transform:
     translate(-50%,-50%);
 
-  z-index:200;
-
   color:white;
 
-  font-size:42px;
+  font-size:52px;
 
   text-align:center;
-
-  font-family:
-    'Press Start 2P',
-    cursive;
 
   text-shadow:
-    0 0 10px cyan,
-    0 0 20px cyan;
-}
+    0 0 18px cyan;
 
-/* ==========================
-   PLAYER INDICATORS
-========================== */
-.playerIndicator{
-  position:absolute;
-
-  z-index:120;
-
-  pointer-events:none;
-}
-
-.indicatorArrow{
-  width:0;
-  height:0;
-
-  border-left:12px solid transparent;
-  border-right:12px solid transparent;
-
-  margin:auto;
-}
-
-.indicatorText{
-  margin-top:4px;
-
-  text-align:center;
-
-  font-size:10px;
-
-  font-family:
-    'Press Start 2P',
-    cursive;
-}
-
-.blueIndicator .indicatorArrow{
-  border-bottom:20px solid #3b82f6;
-}
-
-.redIndicator .indicatorArrow{
-  border-bottom:20px solid #ef4444;
-}
-
-.blueIndicator .indicatorText{
-  color:#93c5fd;
-}
-
-.redIndicator .indicatorText{
-  color:#fca5a5;
+  z-index:300;
 }
 
 .hidden{
   display:none !important;
 }
 
+
+/* ==========================
+   PLAYER INDICATORS
+========================== */
+.playerIndicator{
+
+  position:absolute;
+
+  z-index:120;
+
+  display:flex;
+  flex-direction:column;
+
+  align-items:center;
+
+  pointer-events:none;
+}
+
+.indicatorArrow{
+
+  width:0;
+  height:0;
+
+  border-left:12px solid transparent;
+  border-right:12px solid transparent;
+  border-bottom:18px solid white;
+}
+
+.indicatorText{
+
+  margin-top:4px;
+
+  font-size:12px;
+
+  color:white;
+}
+
+.blueIndicator .indicatorArrow{
+  border-bottom-color:#3b82f6;
+}
+
+.redIndicator .indicatorArrow{
+  border-bottom-color:#ef4444;
+}
+
+
 /* ==========================
    CATEGORY SELECT
 ========================== */
 .categoryPanel{
-  min-width:900px;
-}
-
-.smallTitle{
-  font-size:38px;
-  line-height:60px;
+  min-width:950px;
 }
 
 .categoryGrid{
+
   display:flex;
-  gap:40px;
+
   justify-content:center;
-  margin-top:30px;
+
+  gap:40px;
 }
 
 .categoryCard{
+
   width:320px;
   height:340px;
 
-  border-radius:18px;
+  border-radius:20px;
 
   cursor:pointer;
 
@@ -460,14 +490,13 @@ body{
   align-items:center;
   justify-content:center;
 
-  text-align:center;
-
   position:relative;
 
   overflow:hidden;
 }
 
 .categoryCard:hover{
+
   transform:
     scale(1.05);
 
@@ -476,24 +505,19 @@ body{
 }
 
 .categoryCard h2{
+
   font-size:28px;
 
-  margin-bottom:25px;
-
-  font-family:
-    'Press Start 2P',
-    cursive;
+  margin-bottom:28px;
 }
 
 .categoryCard p{
+
   font-size:12px;
 
-  line-height:28px;
-
-  font-family:
-    'Press Start 2P',
-    cursive;
+  line-height:30px;
 }
+
 
 /* ELEMENTAL */
 .elementalCard{
@@ -501,8 +525,8 @@ body{
   background:
     linear-gradient(
       135deg,
-      rgba(0,255,255,0.2),
-      rgba(0,0,0,0.85)
+      rgba(0,255,255,0.18),
+      rgba(0,0,0,0.88)
     );
 
   border:
@@ -513,34 +537,6 @@ body{
   color:#67e8f9;
 }
 
-.elementalCard::before{
-  content:"";
-
-  position:absolute;
-  inset:0;
-
-  background:
-    radial-gradient(
-      circle at top,
-      rgba(0,255,255,0.25),
-      transparent 60%
-    );
-
-  animation:
-    elementalGlow 3s infinite alternate;
-}
-
-@keyframes elementalGlow{
-
-  from{
-    opacity:0.5;
-  }
-
-  to{
-    opacity:1;
-  }
-
-}
 
 /* MEME */
 .memeCard{
@@ -548,8 +544,8 @@ body{
   background:
     linear-gradient(
       135deg,
-      rgba(255,200,0,0.18),
-      rgba(0,0,0,0.85)
+      rgba(255,200,0,0.15),
+      rgba(0,0,0,0.88)
     );
 
   border:
@@ -560,26 +556,6 @@ body{
   color:#facc15;
 }
 
-.memeCard::before{
-  content:"😂";
-
-  position:absolute;
-
-  top:18px;
-  right:20px;
-
-  font-size:32px;
-
-  opacity:0.25;
-
-  transform:
-    rotate(12deg);
-}
-
-/* HIDDEN */
-.hidden{
-  display:none !important;
-}
 
 /* ==========================
    CHARACTER SELECT
@@ -589,15 +565,18 @@ body{
 }
 
 .fighterGrid{
-  display:flex;
-  gap:30px;
-  justify-content:center;
-  flex-wrap:wrap;
 
-  margin-top:30px;
+  display:flex;
+
+  justify-content:center;
+
+  gap:30px;
+
+  flex-wrap:wrap;
 }
 
 .fighterCard{
+
   width:260px;
   height:360px;
 
@@ -608,7 +587,7 @@ body{
     2px solid white;
 
   border-radius:
-    18px;
+    20px;
 
   cursor:pointer;
 
@@ -618,13 +597,8 @@ body{
   flex-direction:column;
 
   align-items:center;
-  justify-content:center;
 
-  text-align:center;
-
-  padding:20px;
-
-  position:relative;
+  padding-top:35px;
 
   overflow:hidden;
 }
@@ -634,43 +608,46 @@ body{
   transform:
     translateY(-8px)
     scale(1.03);
-
-  box-shadow:
-    0 0 25px rgba(255,255,255,0.22);
-
 }
 
-.fighterPortrait{
+.fighterPlaceholder{
 
-  width:120px;
-  height:120px;
+  width:140px;
+  height:140px;
 
   border-radius:50%;
 
-  margin-bottom:25px;
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  margin-bottom:24px;
+
+  font-size:18px;
+
+  border:
+    2px solid rgba(255,255,255,0.18);
 
   background:
     radial-gradient(
       circle,
-      rgba(255,255,255,0.18),
+      rgba(255,255,255,0.12),
       transparent
     );
-
-  border:
-    2px solid rgba(255,255,255,0.2);
 }
 
 .fighterCard h2{
 
   font-size:18px;
 
-  margin-bottom:18px;
-
   line-height:28px;
 
-  font-family:
-    'Press Start 2P',
-    cursive;
+  min-height:60px;
+
+  text-align:center;
+
+  margin-bottom:12px;
 }
 
 .fighterCard p{
@@ -681,10 +658,39 @@ body{
 
   color:#ddd;
 
-  font-family:
-    'Press Start 2P',
-    cursive;
+  text-align:center;
 }
+
+
+/* ==========================
+   PLAYER SELECT STATES
+========================== */
+.selectedP1{
+
+  border:
+    3px solid #3b82f6 !important;
+
+  box-shadow:
+    0 0 40px #3b82f6 !important;
+
+  transform:
+    translateY(-8px)
+    scale(1.03);
+}
+
+.selectedP2{
+
+  border:
+    3px solid #ef4444 !important;
+
+  box-shadow:
+    0 0 40px #ef4444 !important;
+
+  transform:
+    translateY(-8px)
+    scale(1.03);
+}
+
 
 /* ==========================
    BACK BUTTON
@@ -714,10 +720,6 @@ body{
 
   font-size:12px;
 
-  font-family:
-    'Press Start 2P',
-    cursive;
-
   transition:0.2s;
 }
 
@@ -728,84 +730,6 @@ body{
 
   box-shadow:
     0 0 20px rgba(255,215,0,0.4);
-
-}
-
-
-/* ==========================
-   FIGHTER IMAGE
-========================== */
-.fighterImage{
-
-  width:140px;
-  height:140px;
-
-  object-fit:contain;
-
-  margin-bottom:20px;
-
-  image-rendering:
-    pixelated;
-
-  filter:
-    drop-shadow(
-      0 0 12px rgba(255,255,255,0.2)
-    );
-}
-
-
-/* ==========================
-   FIGHTER CARD IMPROVEMENTS
-========================== */
-.fighterCard{
-
-  justify-content:flex-start;
-
-  padding-top:35px;
-}
-
-.fighterCard h2{
-
-  min-height:60px;
-}
-
-.fighterCard p{
-
-  margin-top:10px;
-}
-
-/* ==========================
-   PLACEHOLDER FIGHTER
-========================== */
-.fighterPlaceholder{
-
-  width:140px;
-  height:140px;
-
-  border-radius:50%;
-
-  display:flex;
-
-  align-items:center;
-  justify-content:center;
-
-  margin-bottom:20px;
-
-  font-size:18px;
-
-  font-family:
-    'Press Start 2P',
-    cursive;
-
-  border:
-    2px solid rgba(255,255,255,0.2);
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(255,255,255,0.12),
-      transparent
-    );
 }
 
 
@@ -819,7 +743,7 @@ body{
   align-items:center;
   justify-content:center;
 
-  gap:80px;
+  gap:90px;
 
   animation:
     vsZoom 0.5s ease;
@@ -833,10 +757,6 @@ body{
 
   line-height:70px;
 
-  font-family:
-    'Press Start 2P',
-    cursive;
-
   text-shadow:
     0 0 20px currentColor;
 }
@@ -846,10 +766,6 @@ body{
   font-size:90px;
 
   color:white;
-
-  font-family:
-    'Press Start 2P',
-    cursive;
 
   animation:
     pulseVS 1s infinite alternate;
@@ -864,7 +780,6 @@ body{
   to{
     transform:scale(1.08);
   }
-
 }
 
 @keyframes vsZoom{
@@ -878,36 +793,27 @@ body{
     opacity:1;
     transform:scale(1);
   }
-
 }
+
 
 /* ==========================
-   PLAYER SELECT STATES
+   HIT FLASH
 ========================== */
-.selectedP1{
+.hitFlash{
 
-  border:
-    3px solid #3b82f6 !important;
-
-  box-shadow:
-    0 0 40px #3b82f6 !important;
-
-  transform:
-    translateY(-8px)
-    scale(1.03);
-
+  animation:
+    hitFlashAnim 0.12s;
 }
 
-.selectedP2{
+@keyframes hitFlashAnim{
 
-  border:
-    3px solid #ef4444 !important;
+  0%{
+    filter:
+      brightness(3);
+  }
 
-  box-shadow:
-    0 0 40px #ef4444 !important;
-
-  transform:
-    translateY(-8px)
-    scale(1.03);
-
+  100%{
+    filter:
+      brightness(1);
+  }
 }

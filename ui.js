@@ -52,6 +52,15 @@ const p1Name =
 const p2Name =
   document.getElementById("p2Name");
 
+const retryBtn =
+  document.getElementById("retryBtn");
+
+const controlsMenu =
+  document.getElementById("controlsMenu");
+
+const uiMenuBtn =
+  document.getElementById("menuBtn");
+
 
 // ==========================
 // PLAYER SELECT
@@ -70,47 +79,58 @@ let selectedFighterP2 = null;
 // ==========================
 let menuVisible = true;
 
-menuBtn.addEventListener("click",()=>{
+if(uiMenuBtn){
 
-  menuVisible = !menuVisible;
+  uiMenuBtn.addEventListener(
+    "click",
+    ()=>{
 
-  if(menuVisible){
+      menuVisible =
+        !menuVisible;
 
-    controlsMenu.style.display =
-      "block";
+      if(menuVisible){
 
-    menuBtn.innerHTML =
-      "Hide Controls";
+        controlsMenu.style.display =
+          "block";
 
-  }else{
+        uiMenuBtn.innerHTML =
+          "Hide Controls";
 
-    controlsMenu.style.display =
-      "none";
+      }else{
 
-    menuBtn.innerHTML =
-      "Show Controls";
+        controlsMenu.style.display =
+          "none";
 
-  }
+        uiMenuBtn.innerHTML =
+          "Show Controls";
 
-});
+      }
+
+    }
+  );
+
+}
 
 
 // ==========================
 // PLAY BUTTON
 // ==========================
-playBtn.addEventListener("click",()=>{
+playBtn.addEventListener(
+  "click",
+  ()=>{
 
-  mainMenu.classList.remove(
-    "activeScreen"
-  );
+    mainMenu.classList.remove(
+      "activeScreen"
+    );
 
-  openCategorySelect();
+    openCategorySelect();
 
-});
+  }
+);
 
 
 // ==========================
-// OPEN CATEGORY SELECT
+// OPEN CATEGORY
 // ==========================
 function openCategorySelect(){
 
@@ -121,87 +141,94 @@ function openCategorySelect(){
   categoryTitle.innerHTML =
     `PLAYER ${selectingPlayer} CATEGORY`;
 
-  gameState = "CATEGORY_SELECT";
+  gameState =
+    "CATEGORY_SELECT";
 
 }
 
 
 // ==========================
-// BACK TO MENU
+// BACK BUTTONS
 // ==========================
-backToMenuBtn.addEventListener("click",()=>{
+backToMenuBtn.addEventListener(
+  "click",
+  ()=>{
 
-  categorySelect.classList.remove(
-    "activeScreen"
-  );
+    categorySelect.classList.remove(
+      "activeScreen"
+    );
 
-  mainMenu.classList.add(
-    "activeScreen"
-  );
+    mainMenu.classList.add(
+      "activeScreen"
+    );
 
-  resetSelections();
+    resetSelections();
 
-  gameState = "MENU";
+    gameState = "MENU";
 
-});
+  }
+);
 
+backToCategoryBtn.addEventListener(
+  "click",
+  ()=>{
 
-// ==========================
-// BACK TO CATEGORY
-// ==========================
-backToCategoryBtn.addEventListener("click",()=>{
+    characterSelect.classList.remove(
+      "activeScreen"
+    );
 
-  characterSelect.classList.remove(
-    "activeScreen"
-  );
+    categorySelect.classList.add(
+      "activeScreen"
+    );
 
-  categorySelect.classList.add(
-    "activeScreen"
-  );
-
-  gameState = "CATEGORY_SELECT";
-
-});
+  }
+);
 
 
 // ==========================
 // CATEGORY BUTTONS
 // ==========================
-elementalBtn.addEventListener("click",()=>{
+elementalBtn.addEventListener(
+  "click",
+  ()=>{
 
-  if(selectingPlayer === 1){
+    if(selectingPlayer === 1){
 
-    selectedCategoryP1 =
-      "elemental";
+      selectedCategoryP1 =
+        "elemental";
 
-  }else{
+    }else{
 
-    selectedCategoryP2 =
-      "elemental";
+      selectedCategoryP2 =
+        "elemental";
 
-  }
+    }
 
-  openCharacterSelect();
-
-});
-
-memeBtn.addEventListener("click",()=>{
-
-  if(selectingPlayer === 1){
-
-    selectedCategoryP1 =
-      "meme";
-
-  }else{
-
-    selectedCategoryP2 =
-      "meme";
+    openCharacterSelect();
 
   }
+);
 
-  openCharacterSelect();
+memeBtn.addEventListener(
+  "click",
+  ()=>{
 
-});
+    if(selectingPlayer === 1){
+
+      selectedCategoryP1 =
+        "meme";
+
+    }else{
+
+      selectedCategoryP2 =
+        "meme";
+
+    }
+
+    openCharacterSelect();
+
+  }
+);
 
 
 // ==========================
@@ -239,10 +266,13 @@ function renderCharacterCards(){
 
   for(let key in fighters){
 
-    let fighter = fighters[key];
+    let fighter =
+      fighters[key];
 
-    if(fighter.category !==
-       currentCategory) continue;
+    if(
+      fighter.category !==
+      currentCategory
+    ) continue;
 
     const card =
       document.createElement("div");
@@ -254,12 +284,12 @@ function renderCharacterCards(){
       fighter.color;
 
     card.innerHTML = `
-
       <div
         class="fighterPlaceholder"
         style="
           color:${fighter.color};
-          text-shadow:0 0 15px ${fighter.color};
+          text-shadow:
+          0 0 15px ${fighter.color};
         "
       >
         ${fighter.name.split(" ")[0]}
@@ -274,50 +304,17 @@ function renderCharacterCards(){
       </p>
     `;
 
-    card.addEventListener("mouseenter",()=>{
+    card.addEventListener(
+      "click",
+      ()=>{
 
-      if(
-        !card.classList.contains(
-          "selectedP1"
-        ) &&
-        !card.classList.contains(
-          "selectedP2"
-        )
-      ){
-
-        card.style.boxShadow =
-          `0 0 35px ${fighter.color}`;
+        selectFighter(
+          fighter,
+          card
+        );
 
       }
-
-    });
-
-    card.addEventListener("mouseleave",()=>{
-
-      if(
-        !card.classList.contains(
-          "selectedP1"
-        ) &&
-        !card.classList.contains(
-          "selectedP2"
-        )
-      ){
-
-        card.style.boxShadow =
-          "";
-
-      }
-
-    });
-
-    card.addEventListener("click",()=>{
-
-      selectFighter(
-        fighter,
-        card
-      );
-
-    });
+    );
 
     fighterGrid.appendChild(card);
 
@@ -334,9 +331,6 @@ function selectFighter(
   card
 ){
 
-  // ==========================
-  // PLAYER 1
-  // ==========================
   if(selectingPlayer === 1){
 
     selectedFighterP1 =
@@ -345,9 +339,6 @@ function selectFighter(
     card.classList.add(
       "selectedP1"
     );
-
-    card.style.boxShadow =
-      "0 0 40px #3b82f6";
 
     setTimeout(()=>{
 
@@ -365,18 +356,12 @@ function selectFighter(
 
   }
 
-  // ==========================
-  // PLAYER 2
-  // ==========================
   selectedFighterP2 =
     fighter;
 
   card.classList.add(
     "selectedP2"
   );
-
-  card.style.boxShadow =
-    "0 0 40px #ef4444";
 
   setTimeout(()=>{
 
@@ -432,7 +417,6 @@ function openVSscreen(){
 // ==========================
 function applySelectedFighters(){
 
-  // PLAYER 1
   player1.fighter =
     selectedFighterP1;
 
@@ -445,10 +429,6 @@ function applySelectedFighters(){
   player1.speed =
     selectedFighterP1.speed;
 
-  p1.style.filter =
-    selectedFighterP1.aura;
-
-  // PLAYER 2
   player2.fighter =
     selectedFighterP2;
 
@@ -461,8 +441,29 @@ function applySelectedFighters(){
   player2.speed =
     selectedFighterP2.speed;
 
-  p2.style.filter =
-    selectedFighterP2.aura;
+  const p1Element =
+    document.getElementById(
+      "p1"
+    );
+
+  const p2Element =
+    document.getElementById(
+      "p2"
+    );
+
+  if(p1Element){
+
+    p1Element.style.filter =
+      selectedFighterP1.aura;
+
+  }
+
+  if(p2Element){
+
+    p2Element.style.filter =
+      selectedFighterP2.aura;
+
+  }
 
 }
 
@@ -496,10 +497,13 @@ function startGame(){
 
 
 // ==========================
-// RETRY BUTTON
+// RETRY
 // ==========================
-retryBtn.addEventListener("click",()=>{
+retryBtn.addEventListener(
+  "click",
+  ()=>{
 
-  location.reload();
+    location.reload();
 
-});
+  }
+);
