@@ -24,6 +24,33 @@ const p2Indicator =
 const roundText =
   document.getElementById("roundText");
 
+const comboText =
+  document.getElementById("comboText");
+
+
+// ==========================
+// PAUSE MENU
+// ==========================
+const pauseScreen =
+  document.getElementById(
+    "pauseScreen"
+  );
+
+const resumeBtn =
+  document.getElementById(
+    "resumeBtn"
+  );
+
+const restartBtn =
+  document.getElementById(
+    "restartBtn"
+  );
+
+const returnMenuBtn =
+  document.getElementById(
+    "returnMenuBtn"
+  );
+
 
 // ==========================
 // SOUNDS
@@ -132,7 +159,6 @@ function createPlayer(x){
 
     velocityY:0,
 
-    // NEW
     velocityX:0,
 
     hp:150,
@@ -185,6 +211,17 @@ let p2Rounds = 0;
 
 let roundOver = false;
 
+let p1Combo = 0;
+let p2Combo = 0;
+
+let comboTimer = null;
+
+let roundStarting = false;
+
+let paused = false;
+
+let matchFinished = false;
+
 
 // ==========================
 // SET ANIMATION
@@ -212,6 +249,344 @@ function setAnimation(
 
 
 // ==========================
+// COMBO SYSTEM
+// ==========================
+function addCombo(player){
+
+  if(!comboText) return;
+
+  if(player === player1){
+
+    p1Combo++;
+    p2Combo = 0;
+
+    if(p1Combo >= 2){
+
+      comboText.innerHTML =
+        `${p1Combo} HIT COMBO`;
+
+      comboText.classList.remove(
+        "hidden"
+      );
+
+    }
+
+  }else{
+
+    p2Combo++;
+    p1Combo = 0;
+
+    if(p2Combo >= 2){
+
+      comboText.innerHTML =
+        `${p2Combo} HIT COMBO`;
+
+      comboText.classList.remove(
+        "hidden"
+      );
+
+    }
+
+  }
+
+  clearTimeout(comboTimer);
+
+  comboTimer = setTimeout(()=>{
+
+    p1Combo = 0;
+    p2Combo = 0;
+
+    comboText.classList.add(
+      "hidden"
+    );
+
+  },1500);
+
+}
+
+
+// ==========================
+// ROUND INTRO
+// ==========================
+async function startRoundIntro(){
+
+  if(!gameStarted){
+    return;
+  }
+
+  roundStarting = true;
+
+  const currentRound =
+    p1Rounds +
+    p2Rounds +
+    1;
+
+  roundText.innerHTML =
+    `ROUND ${currentRound}`;
+
+  await new Promise(
+    r=>setTimeout(r,1000)
+  );
+
+  if(!gameStarted){
+    roundStarting = false;
+    return;
+  }
+
+  roundText.innerHTML =
+    "READY";
+
+  await new Promise(
+    r=>setTimeout(r,1000)
+  );
+
+  if(!gameStarted){
+    roundStarting = false;
+    return;
+  }
+
+  roundText.innerHTML =
+    "FIGHT!";
+
+  await new Promise(
+    r=>setTimeout(r,800)
+  );
+
+  if(!gameStarted){
+    roundStarting = false;
+    return;
+  }
+
+  roundText.innerHTML = "";
+
+  roundStarting = false;
+
+}
+
+// ==========================
+// PAUSE SYSTEM
+// ==========================
+function togglePause(){
+
+  if(
+    !gameStarted ||
+    roundOver ||
+    matchFinished
+  ){
+    return;
+  }
+
+  paused = !paused;
+
+  if(paused){
+
+    freezeGame();
+
+  }
+
+  if(paused){
+
+    pauseScreen.classList.add(
+      "activeScreen"
+    );
+
+  }else{
+
+    pauseScreen.classList.remove(
+      "activeScreen"
+    );
+
+  }
+
+}
+
+
+function restartMatch(){
+
+  paused = false;
+
+  matchFinished = false;
+
+  pauseScreen.classList.remove(
+    "activeScreen"
+  );
+
+  winnerText.classList.add(
+    "hidden"
+  );
+
+  p1Rounds = 0;
+  p2Rounds = 0;
+
+  nextRound();
+
+}
+
+
+function returnToMenu(){
+
+  paused = false;
+
+  matchFinished = false;
+
+  gameStarted = false;
+
+  freezeGame();
+
+  roundStarting = false;
+
+  pauseScreen.classList.remove(
+    "activeScreen"
+  );
+
+  winnerText.classList.add(
+    "hidden"
+  );
+
+  roundText.innerHTML = "";
+
+  p1Rounds = 0;
+  p2Rounds = 0;
+
+  p1Combo = 0;
+  p2Combo = 0;
+
+  if(comboText){
+
+    comboText.classList.add(
+      "hidden"
+    );
+
+  }
+
+  projectiles.forEach(
+    ball=>{
+
+      if(ball.element){
+
+        ball.element.remove();
+
+      }
+
+    }
+  );
+
+  projectiles = [];
+
+  roundStarting = false;
+
+  roundText.innerHTML = "";
+
+if(
+  typeof resetSelections ===
+  "function"
+){
+
+  resetSelections();
+
+}
+
+if(
+  typeof gameState !==
+  "undefined"
+){
+
+  gameState = "MENU";
+
+}
+
+if(
+  typeof categorySelect !==
+  "undefined"
+){
+
+  categorySelect.classList.remove(
+    "activeScreen"
+  );
+
+}
+
+if(
+  typeof characterSelect !==
+  "undefined"
+){
+
+  characterSelect.classList.remove(
+    "activeScreen"
+  );
+
+}
+
+if(
+  typeof vsScreen !==
+  "undefined"
+){
+
+  vsScreen.classList.remove(
+    "activeScreen"
+  );
+
+}
+
+if(
+  typeof resultScreen !==
+  "undefined"
+){
+
+  resultScreen.classList.remove(
+    "activeScreen"
+  );
+
+}
+
+if(
+  typeof mainMenu !==
+  "undefined"
+){
+
+  mainMenu.classList.add(
+    "activeScreen"
+  );
+
+}
+
+}
+
+// ==========================
+// PAUSE BUTTON EVENTS
+// ==========================
+if(resumeBtn){
+
+  resumeBtn.onclick = ()=>{
+
+    togglePause();
+
+  };
+
+}
+
+if(restartBtn){
+
+  restartBtn.onclick = ()=>{
+
+    restartMatch();
+
+  };
+
+}
+
+if(returnMenuBtn){
+
+  returnMenuBtn.onclick = ()=>{
+
+    returnToMenu();
+
+  };
+
+}
+
+
+// ==========================
 // DASH
 // ==========================
 function dash(player,direction){
@@ -231,7 +606,6 @@ function dash(player,direction){
   player.x += direction * 160;
 
 }
-
 
 // ==========================
 // DOUBLE TAP DASH
@@ -312,7 +686,10 @@ window.addEventListener(
 // ==========================
 function gameOver(loser){
 
-  if(roundOver) return;
+  if(
+    roundOver ||
+    matchFinished
+  ) return;
 
   roundOver = true;
 
@@ -343,13 +720,17 @@ function gameOver(loser){
     "hidden"
   );
 
-  // BEST OF 3
+  // ==========================
+  // MATCH WIN
+  // ==========================
   if(p1Rounds >= 2){
 
-    setTimeout(()=>{
+    matchFinished = true;
 
-      winnerText.innerHTML =
-        "PLAYER 1 WINS MATCH";
+    winnerText.innerHTML =
+      "PLAYER 1 WINS MATCH";
+
+    setTimeout(()=>{
 
       gameStarted = false;
 
@@ -360,7 +741,7 @@ function gameOver(loser){
       endWinner.innerHTML =
         "PLAYER 1<br>WINS";
 
-    },1000);
+    },2500);
 
     return;
 
@@ -368,10 +749,12 @@ function gameOver(loser){
 
   if(p2Rounds >= 2){
 
-    setTimeout(()=>{
+    matchFinished = true;
 
-      winnerText.innerHTML =
-        "PLAYER 2 WINS MATCH";
+    winnerText.innerHTML =
+      "PLAYER 2 WINS MATCH";
+
+    setTimeout(()=>{
 
       gameStarted = false;
 
@@ -382,17 +765,20 @@ function gameOver(loser){
       endWinner.innerHTML =
         "PLAYER 2<br>WINS";
 
-    },1000);
+    },2500);
 
     return;
 
   }
 
+  // ==========================
+  // NEXT ROUND
+  // ==========================
   setTimeout(()=>{
 
     nextRound();
 
-  },2000);
+  },2500);
 
 }
 
@@ -404,9 +790,26 @@ function nextRound(){
 
   roundOver = false;
 
+  paused = false;
+
   winnerText.classList.add(
     "hidden"
   );
+
+  if(comboText){
+
+    comboText.classList.add(
+      "hidden"
+    );
+
+  }
+
+  clearTimeout(
+    comboTimer
+  );
+
+  p1Combo = 0;
+  p2Combo = 0;
 
   player1.x = 450;
   player1.y = ground;
@@ -416,6 +819,9 @@ function nextRound(){
 
   player1.velocityX = 0;
   player2.velocityX = 0;
+
+  player1.velocityY = 0;
+  player2.velocityY = 0;
 
   player1.hp =
     player1.maxHP;
@@ -435,35 +841,39 @@ function nextRound(){
   player1.blocking = false;
   player2.blocking = false;
 
-  player1.jumpCount = 0;
-  player2.jumpCount = 0;
-
-  player1.velocityY = 0;
-  player2.velocityY = 0;
-
   player1.jumping = false;
   player2.jumping = false;
 
-  setAnimation(player1,"idle");
-  setAnimation(player2,"idle");
+  player1.jumpCount = 0;
+  player2.jumpCount = 0;
 
-  projectiles.forEach(ball=>{
+  setAnimation(
+    player1,
+    "idle"
+  );
 
-    if(ball.element){
+  setAnimation(
+    player2,
+    "idle"
+  );
 
-      ball.element.remove();
+  projectiles.forEach(
+    ball=>{
+
+      if(ball.element){
+
+        ball.element.remove();
+
+      }
 
     }
-
-  });
+  );
 
   projectiles = [];
 
-  const currentRound =
-    p1Rounds + p2Rounds + 1;
+  freezeGame();
 
-  roundText.innerHTML =
-    `ROUND ${currentRound}`;
+  startRoundIntro();
 
 }
 
@@ -475,8 +885,25 @@ window.addEventListener(
   "keydown",
   (e)=>{
 
+    if(roundStarting)
+      return;
+
     let key =
       e.key.toLowerCase();
+
+    if(key === "escape"){
+
+      togglePause();
+
+      return;
+
+    }
+
+    if(paused){
+
+      return;
+
+    }
 
     if(key === "r"){
 
@@ -579,7 +1006,6 @@ window.addEventListener(
   }
 );
 
-
 // ==========================
 // UPDATE PLAYER
 // ==========================
@@ -587,6 +1013,14 @@ function updatePlayer(
   player,
   controls
 ){
+
+  if(
+    paused ||
+    roundStarting ||
+    matchFinished
+  ){
+    return;
+  }
 
   let moving = false;
 
@@ -597,13 +1031,19 @@ function updatePlayer(
 
   player.velocityX *= 0.82;
 
-  if(Math.abs(player.velocityX) < 0.2){
+  if(
+    Math.abs(
+      player.velocityX
+    ) < 0.2
+  ){
 
     player.velocityX = 0;
 
   }
 
-  if(player.dashCooldown > 0){
+  if(
+    player.dashCooldown > 0
+  ){
 
     player.dashCooldown--;
 
@@ -621,44 +1061,65 @@ function updatePlayer(
     !player.blocking
   ){
 
-    if(keys[controls.left]){
+    if(
+      keys[
+        controls.left
+      ]
+    ){
 
-      player.x -= player.speed;
+      player.x -=
+        player.speed;
 
       moving = true;
 
-      player.facingLeft = true;
+      player.facingLeft =
+        true;
 
     }
 
-    if(keys[controls.right]){
+    if(
+      keys[
+        controls.right
+      ]
+    ){
 
-      player.x += player.speed;
+      player.x +=
+        player.speed;
 
       moving = true;
 
-      player.facingLeft = false;
+      player.facingLeft =
+        false;
 
     }
 
   }
 
+  // ==========================
+  // JUMP
+  // ==========================
   if(
-    keys[controls.jump] &&
+    keys[
+      controls.jump
+    ] &&
     player.jumpCount < 2 &&
     !player.blocking &&
     !player.jumpPressed
   ){
 
-    player.jumpPressed = true;
+    player.jumpPressed =
+      true;
 
-    player.jumping = true;
+    player.jumping =
+      true;
 
     player.jumpCount++;
 
-    player.velocityY = -15;
+    player.velocityY =
+      -15;
 
-    jumpSound.currentTime = 0;
+    jumpSound.currentTime =
+      0;
 
     jumpSound.play();
 
@@ -669,12 +1130,20 @@ function updatePlayer(
 
   }
 
-  if(!keys[controls.jump]){
+  if(
+    !keys[
+      controls.jump
+    ]
+  ){
 
-    player.jumpPressed = false;
+    player.jumpPressed =
+      false;
 
   }
 
+  // ==========================
+  // AIR PHYSICS
+  // ==========================
   if(player.jumping){
 
     player.y +=
@@ -683,15 +1152,21 @@ function updatePlayer(
     player.velocityY +=
       gravity;
 
-    if(!player.attacking){
+    if(
+      !player.attacking
+    ){
 
-      if(player.velocityY < -5){
+      if(
+        player.velocityY < -5
+      ){
 
         player.frame = 0;
 
       }
 
-      else if(player.velocityY < 5){
+      else if(
+        player.velocityY < 5
+      ){
 
         player.frame = 1;
 
@@ -705,15 +1180,20 @@ function updatePlayer(
 
     }
 
-    if(player.y >= ground){
+    if(
+      player.y >= ground
+    ){
 
       player.y = ground;
 
-      player.jumping = false;
+      player.jumping =
+        false;
 
-      player.velocityY = 0;
+      player.velocityY =
+        0;
 
-      player.jumpCount = 0;
+      player.jumpCount =
+        0;
 
       if(
         !player.attacking &&
@@ -731,6 +1211,9 @@ function updatePlayer(
 
   }
 
+  // ==========================
+  // WALK / IDLE
+  // ==========================
   if(
     !player.jumping &&
     !player.attacking &&
@@ -745,7 +1228,9 @@ function updatePlayer(
         "walk"
       );
 
-    }else{
+    }
+
+    else{
 
       setAnimation(
         player,
@@ -767,8 +1252,11 @@ function animate(
   player
 ){
 
-  element.style.width = "220px";
-  element.style.height = "220px";
+  element.style.width =
+    "220px";
+
+  element.style.height =
+    "220px";
 
   element.style.position =
     "absolute";
@@ -785,7 +1273,9 @@ function animate(
   element.style.imageRendering =
     "pixelated";
 
+  // ==========================
   // DEFAULT STICKMAN
+  // ==========================
   if(
     player.fighter &&
     player.fighter.id ===
@@ -800,7 +1290,8 @@ function animate(
       "dead"
     ){
 
-      currentFrameSpeed = 20;
+      currentFrameSpeed =
+        20;
 
     }
 
@@ -818,7 +1309,8 @@ function animate(
 
         player.frame++;
 
-        player.frameTimer = 0;
+        player.frameTimer =
+          0;
 
         if(
           player.currentAnimation ===
@@ -889,7 +1381,9 @@ function animate(
 
   }
 
+  // ==========================
   // PLACEHOLDER FIGHTERS
+  // ==========================
   element.style.backgroundImage =
     "none";
 
@@ -899,7 +1393,8 @@ function animate(
     : player.fighter?.color ||
       "white";
 
-  element.style.display = "flex";
+  element.style.display =
+    "flex";
 
   element.style.alignItems =
     "center";
@@ -916,14 +1411,14 @@ function animate(
   element.style.fontSize =
     "18px";
 
-  element.style.color = "black";
+  element.style.color =
+    "black";
 
   element.innerHTML =
     player.currentAnimation
       .toUpperCase();
 
 }
-
 
 // ==========================
 // POSITIONS
@@ -938,17 +1433,27 @@ function applyPositions(){
   player1.x =
     Math.max(
       minX,
-      Math.min(player1.x,maxX)
+      Math.min(
+        player1.x,
+        maxX
+      )
     );
 
   player2.x =
     Math.max(
       minX,
-      Math.min(player2.x,maxX)
+      Math.min(
+        player2.x,
+        maxX
+      )
     );
 
+  // ==========================
   // SCREEN SHAKE
-  if(shakeDuration > 0){
+  // ==========================
+  if(
+    shakeDuration > 0
+  ){
 
     shakeDuration -= 16;
 
@@ -986,25 +1491,33 @@ function applyPositions(){
 
   p1.style.transform =
     player1.facingLeft
-    ? "scaleX(-1)"
-    : "scaleX(1)";
+      ? "scaleX(-1)"
+      : "scaleX(1)";
 
   p2.style.transform =
     player2.facingLeft
-    ? "scaleX(-1)"
-    : "scaleX(1)";
+      ? "scaleX(-1)"
+      : "scaleX(1)";
 
   p1Indicator.style.left =
-    (player1.x + 65) + "px";
+    (
+      player1.x + 65
+    ) + "px";
 
   p1Indicator.style.top =
-    (player1.y - 80) + "px";
+    (
+      player1.y - 80
+    ) + "px";
 
   p2Indicator.style.left =
-    (player2.x + 65) + "px";
+    (
+      player2.x + 65
+    ) + "px";
 
   p2Indicator.style.top =
-    (player2.y - 80) + "px";
+    (
+      player2.y - 80
+    ) + "px";
 
 }
 
@@ -1033,6 +1546,19 @@ function updateHP(){
     p2Percent + "%";
 
 }
+// ==========================
+// FREEZE GAME
+// ==========================
+function freezeGame(){
+
+  player1.velocityX = 0;
+  player2.velocityX = 0;
+
+  player1.velocityY = 0;
+  player2.velocityY = 0;
+
+}
+
 
 
 // ==========================
@@ -1042,30 +1568,65 @@ function loop(){
 
   if(hitPaused){
 
-    requestAnimationFrame(loop);
+    requestAnimationFrame(
+      loop
+    );
+
     return;
 
   }
 
-  if(gameStarted){
+  if(paused){
 
-    updatePlayer(player1,{
-      left:"a",
-      right:"d",
-      jump:"w"
-    });
+    requestAnimationFrame(
+      loop
+    );
 
-    updatePlayer(player2,{
-      left:"arrowleft",
-      right:"arrowright",
-      jump:"arrowup"
-    });
+    return;
 
-    updateProjectiles();
+  }
 
-    animate(p1,player1);
+  if(
+  gameStarted &&
+  !matchFinished
+  ){
 
-    animate(p2,player2);
+    updatePlayer(
+      player1,
+      {
+        left:"a",
+        right:"d",
+        jump:"w"
+      }
+    );
+
+    updatePlayer(
+      player2,
+      {
+        left:"arrowleft",
+        right:"arrowright",
+        jump:"arrowup"
+      }
+    );
+
+    if(
+      !roundStarting &&
+      !paused
+    ){
+
+      updateProjectiles();
+
+    }
+
+    animate(
+      p1,
+      player1
+    );
+
+    animate(
+      p2,
+      player2
+    );
 
     applyPositions();
 
@@ -1073,8 +1634,20 @@ function loop(){
 
   }
 
-  requestAnimationFrame(loop);
+  requestAnimationFrame(
+    loop
+  );
 
 }
+// ==========================
+// SAFETY RESET
+// ==========================
+window.addEventListener(
+  "blur",
+  ()=>{
 
+    keys = {};
+
+  }
+);
 loop();

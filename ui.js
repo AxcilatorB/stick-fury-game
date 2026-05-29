@@ -491,6 +491,8 @@ function startGame(){
 
   gameStarted = true;
 
+  nextRound();
+
   gameState = "FIGHTING";
 
 }

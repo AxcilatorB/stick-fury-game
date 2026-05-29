@@ -134,10 +134,10 @@ function attack(
       // HIT PAUSE
       hitPause(60);
 
-      // SCREEN SHAKE
+      // IMPROVED SHAKE
       screenShake(
         shakePower,
-        120
+        100 + (damage * 2)
       );
 
       // BLOCK
@@ -153,6 +153,16 @@ function attack(
       }
 
       target.hp -= damage;
+
+      // COMBO HOOK
+      if(
+        typeof addCombo ===
+        "function"
+      ){
+
+        addCombo(attacker);
+
+      }
 
       if(target.hp < 0){
 
@@ -290,12 +300,14 @@ function specialMove(player){
 
   projectile.style.background =
     player.fighter
-    ?.projectileColor || "cyan";
+      ?.projectileColor ||
+    "cyan";
 
   projectile.style.boxShadow =
     `0 0 25px ${
       player.fighter
-      ?.projectileColor || "cyan"
+        ?.projectileColor ||
+      "cyan"
     }`;
 
   projectile.style.left =
@@ -359,8 +371,8 @@ function updateProjectiles(){
 
       const target =
         ball.owner === player1
-        ? player2
-        : player1;
+          ? player2
+          : player1;
 
       let xDistance =
         Math.abs(
@@ -379,9 +391,25 @@ function updateProjectiles(){
 
         hitPause(80);
 
-        screenShake(18,180);
+        // STRONGER SPECIAL SHAKE
+        screenShake(
+          20,
+          220
+        );
 
         target.hp -= 20;
+
+        // COMBO HOOK
+        if(
+          typeof addCombo ===
+          "function"
+        ){
+
+          addCombo(
+            ball.owner
+          );
+
+        }
 
         if(target.hp < 0){
 
@@ -390,7 +418,10 @@ function updateProjectiles(){
         }
 
         // SPECIAL KNOCKBACK
-        if(ball.owner.x < target.x){
+        if(
+          ball.owner.x <
+          target.x
+        ){
 
           target.velocityX = 38;
 
@@ -452,7 +483,9 @@ function updateProjectiles(){
       // REMOVE OFFSCREEN
       if(
         ball.x < -100 ||
-        ball.x > window.innerWidth + 100
+        ball.x >
+          window.innerWidth +
+            100
       ){
 
         ball.element.remove();
