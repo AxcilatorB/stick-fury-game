@@ -329,6 +329,15 @@ function attack(
         "function"
       ){
 
+        if(target.jumping){
+
+          screenShake(
+            shakePower + 4,
+            140
+          );
+
+        }
+
         addCombo(attacker);
 
       }
@@ -342,23 +351,35 @@ function attack(
       // ==========================
       // SMOOTH KNOCKBACK
       // ==========================
+      let finalKnockback =
+        knockbackObj.value;
+
+      if(target.jumping){
+
+        finalKnockback *= 1.4;
+
+      }
+
       if(attacker.x < target.x){
 
         target.velocityX =
-          knockbackObj.value;
+          finalKnockback;
 
       }else{
 
         target.velocityX =
-          -knockbackObj.value;
+          -finalKnockback;
 
       }
 
-      // AIR POP
-      if(type === "jumpkick"){
+      // AIR COMBAT
+      if(target.jumping){
 
-        target.velocityY =
-          -6;
+        target.velocityY = -10;
+
+      }else if(type === "jumpkick"){
+
+        target.velocityY = -8;
 
       }
 
@@ -702,7 +723,15 @@ function updateProjectiles(){
 
         }
 
-        target.velocityY = -8;
+        if(target.jumping){
+
+          target.velocityY = -12;
+
+        }else{
+
+          target.velocityY = -8;
+
+        }
 
         target.hurt = true;
 

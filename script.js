@@ -184,7 +184,11 @@ function createPlayer(x){
     frame:0,
     frameTimer:0,
 
-    dashCooldown:0
+    dashCooldown:0,
+
+    landingRecovery:0,
+
+    airMomentum:0
 
   };
 
@@ -1053,6 +1057,14 @@ function updatePlayer(
 
   }
 
+  if(
+    player.landingRecovery > 0
+  ){
+
+    player.landingRecovery--;
+
+  }
+
   if(player.dead){
 
     return;
@@ -1062,7 +1074,8 @@ function updatePlayer(
   if(
     !player.attacking &&
     !player.hurt &&
-    !player.blocking
+    !player.blocking &&
+    player.landingRecovery <= 0
   ){
 
     if(
@@ -1073,6 +1086,13 @@ function updatePlayer(
 
       player.x -=
         player.speed;
+
+      if(player.jumping){
+
+        player.airMomentum =
+          -player.speed;
+
+      }
 
       moving = true;
 
@@ -1089,6 +1109,13 @@ function updatePlayer(
 
       player.x +=
         player.speed;
+
+      if(player.jumping){
+
+        player.airMomentum =
+          player.speed;
+
+      }
 
       moving = true;
 
@@ -1150,6 +1177,12 @@ function updatePlayer(
   // ==========================
   if(player.jumping){
 
+    player.x +=
+      player.airMomentum;
+
+    player.airMomentum *=
+      0.96;
+
     player.y +=
       player.velocityY;
 
@@ -1198,6 +1231,17 @@ function updatePlayer(
 
       player.jumpCount =
         0;
+
+        if(
+        Math.abs(
+          player.velocityY
+        ) > 10
+      ){
+
+        player.landingRecovery =
+          12;
+
+      }
 
       if(
         !player.attacking &&
