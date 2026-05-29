@@ -601,7 +601,11 @@ function dash(player,direction){
     player.dead
   ) return;
 
-  player.dashCooldown = 30;
+  player.dashCooldown =
+  player.fighter?.id ===
+  "thunderRonin"
+    ? 22
+    : 30;
 
   player.x += direction * 160;
 

@@ -3,6 +3,149 @@
 // ==========================
 let projectiles = [];
 
+// ==========================
+// PASSIVES
+// ==========================
+function applyPassiveHit(
+  attacker,
+  target,
+  damageObj,
+  knockbackObj
+){
+
+  // FLAME MONK
+  if(
+    attacker.fighter?.id ===
+    "flameMonk"
+  ){
+
+    if(
+  !target.burning
+  ){
+
+    target.burning = true;
+
+    let burnTicks = 3;
+
+    const burnInterval =
+      setInterval(()=>{
+
+        if(
+          target.dead ||
+          !target.burning
+        ){
+
+          clearInterval(
+            burnInterval
+          );
+
+          return;
+
+        }
+
+        target.hp -= 2;
+
+        burnTicks--;
+
+        if(
+          target.hp <= 0
+        ){
+
+          target.hp = 0;
+
+          target.dead = true;
+
+          setAnimation(
+            target,
+            "dead"
+          );
+
+          gameOver(
+            target
+          );
+
+          clearInterval(
+            burnInterval
+          );
+
+        }
+
+        if(
+          burnTicks <= 0
+        ){
+
+          target.burning =
+            false;
+
+          clearInterval(
+            burnInterval
+          );
+
+        }
+
+      },1000);
+
+}
+
+  }
+
+  // BANANA WIZARD
+  if(
+    attacker.fighter?.id ===
+    "bananaWizard"
+  ){
+
+    if(
+      Math.random() < 0.15
+    ){
+
+      damageObj.value += 8;
+
+      knockbackObj.value += 10;
+
+    }
+
+  }
+
+}
+
+// ==========================
+// PASSIVE PROJECTILE HIT
+// ==========================
+function applyProjectilePassive(
+  attacker,
+  target,
+  damageObj
+){
+
+  // BUFF SHIBA ARMOR
+  if(
+    target.fighter?.id ===
+    "buffShiba"
+  ){
+
+      damageObj.value *= 0.9;
+
+  }
+
+  // BANANA WIZARD CHAOS
+  if(
+    attacker.fighter?.id ===
+    "bananaWizard"
+  ){
+
+      if(
+        Math.random() < 0.15
+      ){
+
+        damageObj.value += 8;
+
+      }
+
+  }
+
+}
+
 
 // ==========================
 // HIT PAUSE
@@ -86,15 +229,23 @@ function attack(
       ? 120
       : 150;
 
-    let damage =
-      type === "punch"
-      ? 10
-      : 16;
+    let damageObj = {
 
-    let knockback =
-      type === "punch"
-      ? 14
-      : 24;
+      value:
+        type === "punch"
+        ? 10
+        : 16
+
+    };
+
+    let knockbackObj = {
+
+      value:
+        type === "punch"
+        ? 14
+        : 24
+
+    };
 
     let shakePower =
       type === "punch"
@@ -103,15 +254,15 @@ function attack(
 
     if(type === "jumpkick"){
 
-      damage = 18;
+      damageObj.value = 18;
 
-      knockback = 32;
+      knockbackObj.value = 32;
 
       shakePower = 14;
 
     }
 
-    damage *=
+    damageObj.value *=
       attacker.fighter
       ?.damageMultiplier || 1;
 
@@ -134,10 +285,11 @@ function attack(
       // HIT PAUSE
       hitPause(60);
 
-      // IMPROVED SHAKE
       screenShake(
         shakePower,
-        100 + (damage * 2)
+        100 + (
+          damageObj.value * 2
+        )
       );
 
       // BLOCK
@@ -146,13 +298,30 @@ function attack(
         blockSound.currentTime = 0;
         blockSound.play();
 
-        damage *= 0.2;
+        damageObj.value *= 0.2;
 
-        knockback *= 0.35;
+        knockbackObj.value *= 0.35;
 
       }
 
-      target.hp -= damage;
+      applyPassiveHit(
+        attacker,
+        target,
+        damageObj,
+        knockbackObj
+      );
+
+      // BUFF SHIBA
+      if(
+        target.fighter?.id ===
+        "buffShiba"
+      ){
+
+        damageObj.value *= 0.9;
+
+      }
+
+      target.hp -= damageObj.value;
 
       // COMBO HOOK
       if(
@@ -176,12 +345,12 @@ function attack(
       if(attacker.x < target.x){
 
         target.velocityX =
-          knockback;
+          knockbackObj.value;
 
       }else{
 
         target.velocityX =
-          -knockback;
+          -knockbackObj.value;
 
       }
 
@@ -397,7 +566,95 @@ function updateProjectiles(){
           220
         );
 
-        target.hp -= 20;
+        let damageObj = {
+
+          value:20
+
+        };
+
+        applyProjectilePassive(
+          ball.owner,
+          target,
+          damageObj
+        );
+
+        if(
+  ball.owner.fighter?.id ===
+  "flameMonk"
+){
+
+  if(
+    !target.burning
+  ){
+
+    target.burning = true;
+
+    let burnTicks = 3;
+
+    const burnInterval =
+      setInterval(()=>{
+
+        if(
+          target.dead ||
+          !target.burning
+        ){
+
+          clearInterval(
+            burnInterval
+          );
+
+          return;
+
+        }
+
+        target.hp -= 2;
+
+        burnTicks--;
+
+        if(
+          target.hp <= 0
+        ){
+
+          target.hp = 0;
+
+          target.dead = true;
+
+          setAnimation(
+            target,
+            "dead"
+          );
+
+          gameOver(
+            target
+          );
+
+          clearInterval(
+            burnInterval
+          );
+
+        }
+
+        if(
+          burnTicks <= 0
+        ){
+
+          target.burning =
+            false;
+
+          clearInterval(
+            burnInterval
+          );
+
+        }
+
+      },1000);
+
+  }
+
+}
+
+        target.hp -=
+          damageObj.value;
 
         // COMBO HOOK
         if(
@@ -423,11 +680,25 @@ function updateProjectiles(){
           target.x
         ){
 
-          target.velocityX = 38;
+          target.velocityX =
+
+          ball.owner.fighter?.id ===
+          "bananaWizard"
+
+            ? 48
+
+            : 38;
 
         }else{
 
-          target.velocityX = -38;
+          target.velocityX =
+
+          ball.owner.fighter?.id ===
+          "bananaWizard"
+
+            ? -48
+
+            : -38;
 
         }
 
