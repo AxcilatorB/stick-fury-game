@@ -81,6 +81,34 @@ const gravity = 0.8;
 
 const ground = 650;
 
+// ==========================
+// PLATFORMS
+// ==========================
+const platforms = [
+
+  {
+    x: 350,
+    y: 620,
+    width: 220,
+    height: 20
+  },
+
+  {
+    x: 780,
+    y: 580,
+    width: 260,
+    height: 20
+  },
+
+  {
+    x: 1210,
+    y: 620,
+    width: 220,
+    height: 20
+  }
+
+];
+
 const frameSpeed = 8;
 
 
@@ -855,6 +883,12 @@ function nextRound(){
   player1.jumpCount = 0;
   player2.jumpCount = 0;
 
+  player1.airMomentum = 0;
+  player2.airMomentum = 0;
+
+  player1.landingRecovery = 0;
+  player2.landingRecovery = 0;
+
   setAnimation(
     player1,
     "idle"
@@ -1015,6 +1049,73 @@ window.addEventListener(
 );
 
 // ==========================
+// PLATFORM COLLISION
+// ==========================
+function checkPlatforms(player){
+
+  if(!player.jumping)
+    return;
+
+  const playerBottom =
+    player.y + 220;
+
+  const previousBottom =
+    playerBottom -
+    player.velocityY;
+
+  for(
+    const platform
+    of platforms
+  ){
+
+    const feetLeft =
+      player.x + 100;
+
+    const feetRight =
+      player.x + 120;
+
+    const withinX =
+
+      feetRight >
+      platform.x &&
+
+      feetLeft <
+      platform.x +
+      platform.width;
+
+    const crossingTop =
+
+      previousBottom <=
+      platform.y &&
+
+      playerBottom >=
+      platform.y;
+
+    if(
+      withinX &&
+      crossingTop &&
+      player.velocityY > 0
+    ){
+
+      player.y =
+        platform.y - 220;
+
+      player.velocityY = 0;
+
+      player.jumping = false;
+
+      player.jumpCount = 0;
+
+      player.airMomentum = 0;
+
+      return;
+
+    }
+
+  }
+
+}
+// ==========================
 // UPDATE PLAYER
 // ==========================
 function updatePlayer(
@@ -1146,6 +1247,8 @@ function updatePlayer(
 
     player.jumpCount++;
 
+    player.airMomentum = 0;
+
     player.velocityY =
       -15;
 
@@ -1173,6 +1276,59 @@ function updatePlayer(
   }
 
   // ==========================
+  // PLATFORM EDGE CHECK
+  // ==========================
+  if(!player.jumping){
+
+    let standingOnPlatform = false;
+
+    for(const platform of platforms){
+
+      const feetLeft =
+        player.x + 100;
+
+      const feetRight =
+        player.x + 120;
+
+      const withinX =
+
+        feetRight >
+        platform.x &&
+
+        feetLeft <
+        platform.x +
+        platform.width;
+      const onTop =
+
+        Math.abs(
+          (player.y + 220) -
+          platform.y
+        ) < 5;
+
+      if(
+        withinX &&
+        onTop
+      ){
+
+        standingOnPlatform = true;
+
+        break;
+
+      }
+
+    }
+
+    if(
+      !standingOnPlatform &&
+      player.y < ground
+    ){
+
+      player.jumping = true;
+
+    }
+
+  }
+  // ==========================
   // AIR PHYSICS
   // ==========================
   if(player.jumping){
@@ -1188,6 +1344,10 @@ function updatePlayer(
 
     player.velocityY +=
       gravity;
+    
+    checkPlatforms(
+      player
+    );
 
     if(
       !player.attacking
@@ -1221,20 +1381,20 @@ function updatePlayer(
       player.y >= ground
     ){
 
+      const landingSpeed =
+        player.velocityY;
+
       player.y = ground;
 
-      player.jumping =
-        false;
+      player.jumping = false;
 
-      player.velocityY =
-        0;
+      player.velocityY = 0;
 
-      player.jumpCount =
-        0;
+      player.jumpCount = 0;
 
-        if(
+      if(
         Math.abs(
-          player.velocityY
+          landingSpeed
         ) > 10
       ){
 
@@ -1242,7 +1402,6 @@ function updatePlayer(
           12;
 
       }
-
       if(
         !player.attacking &&
         !player.blocking

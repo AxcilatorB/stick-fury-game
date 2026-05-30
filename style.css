@@ -912,3 +912,76 @@ body{
   width:260px;
 
 }
+
+/* ==========================
+   STAGE PLATFORMS
+========================== */
+
+#platformContainer{
+
+  position:absolute;
+
+  inset:0;
+
+  pointer-events:none;
+
+  z-index:10;
+
+}
+
+.platform{
+
+  position:absolute;
+
+  height:20px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #8b5a2b,
+      #5c3b1e
+    );
+
+  border:
+    3px solid
+    rgba(255,255,255,0.18);
+
+  border-radius:
+    12px;
+
+  box-shadow:
+    0 4px 12px
+    rgba(0,0,0,0.35),
+
+    inset 0 2px 0
+    rgba(255,255,255,0.18);
+
+}
+
+/* Decorative top highlight */
+.platform::before{
+
+  border:3px solid red;
+
+  content:"";
+
+  position:absolute;
+
+  left:0;
+  top:0;
+
+  width:100%;
+  height:5px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.25
+    );
+
+  border-radius:
+    12px 12px 0 0;
+
+}
