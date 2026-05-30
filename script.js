@@ -1,6 +1,8 @@
 // ==========================
 // ELEMENTS
 // ==========================
+
+//trial thingy git
 const game = document.getElementById("game");
 
 const p1 = document.getElementById("p1");
